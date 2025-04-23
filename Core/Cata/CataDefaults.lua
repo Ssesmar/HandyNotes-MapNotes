@@ -7,7 +7,8 @@ ns.defaults = {
     --0 General tab
       journal = true,
       tomtom = true,
-      extraInformation = true,
+      KilledBosses = true,
+      BossNames = true,
       assignedgray = true,
       graymultipleID = true,
       ChatMassage = false,
@@ -391,6 +392,10 @@ ns.defaults = {
         SyncCapitalsAndMinimap = false,
         ZoneChanged = true,
         ZoneChangedDetail = false,
+      --Azeroth
+        AzerothEnemyFaction = true,
+      --Continent
+        ContinentEnemyFaction = true,
       --MiniMap
         MiniMapEnemyFaction = true,
         MiniMapInstances = true,
@@ -466,6 +471,31 @@ ns.defaults = {
       colorG_Reduce = 0.65,
       colorB_Reduce = 0.65,
       colorA_Reduce = 0.65,
-    }
+    },
+
+    --13 CoordsDisplay
+    displayCoords =  {
+      showPlayerCoords = false,
+      showMouseCoords = false,
+      PlayerCoordsSize = 0.7,
+      PlayerCoordsAlpha = 1,
+      MouseCoordsSize = 0.7,
+      MouseCoordsAlpha = 1,
+    },
+
+    --14 AreaMap
+    areaMap = {
+      showAreaMapDropDownMenu = true,
+      showAreaMapDropDownMenuCapitalsIcons = true,
+      showAreaMapDropDownMenuZonesIcons = true,
+      showAreaMapUnexploredAreas = true,
+      areaMapScale = 1,
+      showAreaMapCoords = true,
+      areaMapFogOfWarColorR = 1,
+      areaMapFogOfWarColorG = 0,
+      areaMapFogOfWarColorB = 0,
+      areaMapFogOfWarColorA = 1,
+    },
+
   },
 }

@@ -7,7 +7,7 @@ ns.defaults = {
     --0 General tab
       journal = true,
       tomtom = true,
-      extraInformation = true,
+      KilledBosses = true,
       assignedgray = true,
       graymultipleID = true,
       ChatMassage = false,
@@ -404,7 +404,7 @@ ns.defaults = {
       showMinimapCapitalsClassWarlock = false,
       showMinimapCapitalsClassWarrior = false,
 
-    --10 ns.Addon.db.profile.activate.
+     --10 ns.Addon.db.profile.activate.
       activate = {
         HideMapNote = false,
         HideMMB = false,
@@ -423,6 +423,10 @@ ns.defaults = {
         SyncCapitalsAndMinimap = false,
         ZoneChanged = true,
         ZoneChangedDetail = false,
+      --Azeroth
+        AzerothEnemyFaction = true,
+      --Continent
+        ContinentEnemyFaction = true,
       --MiniMap
         MiniMapEnemyFaction = true,
         MiniMapInstances = true,
@@ -450,56 +454,79 @@ ns.defaults = {
         CapitalsTransporting = true,
         CapitalsProfessions = true,
         CapitalsGeneral = true,
-        CapitalsClasses = true,
       --Capitals Minimap
         MinimapCapitalsEnemyFaction = true,
         MinimapCapitalsInstances = true,
         MinimapCapitalsTransporting = true,
         MinimapCapitalsProfessions = true,
         MinimapCapitalsGeneral = true,
-        MinimapCapitalsClasses = true,
       },
 
-      deletedIcons = {
+    deletedIcons = {
 
-        AzerothDeletedIcons = {
-          ['*'] = {},
-        },
-        ContinentDeletedIcons = {
-          ['*'] = {},
-        },
-        ZoneDeletedIcons = {
-          ['*'] = {},
-        },
-        MinimapZoneDeletedIcons = {
-          ['*'] = {},
-        },
-        DungeonDeletedIcons = {
-          ['*'] = {},
-        },
-        CapitalsDeletedIcons = {
-          ['*'] = {},
-        },
-        MinimapCapitalsDeletedIcons = {
-          ['*'] = {},
-        },
+      AzerothDeletedIcons = {
+        ['*'] = {},
       },
-  
-      --12 FogOfWarColor
-      FogOfWarColor = {
-        --FogOfWar
-        colorR = 1,
-        colorG = 1,
-        colorB = 1,
-        colorA = 1,
-        FogOfWarColorR = 1,
-        FogOfWarColorG = 0,
-        FogOfWarColorB = 0,
-        FogOfWarColorA = 1,
-        colorR_Reduce = 0.65,
-        colorG_Reduce = 0.65,
-        colorB_Reduce = 0.65,
-        colorA_Reduce = 0.65,
-      }
+      ContinentDeletedIcons = {
+        ['*'] = {},
+      },
+      ZoneDeletedIcons = {
+        ['*'] = {},
+      },
+      MinimapZoneDeletedIcons = {
+        ['*'] = {},
+      },
+      DungeonDeletedIcons = {
+        ['*'] = {},
+      },
+      CapitalsDeletedIcons = {
+        ['*'] = {},
+      },
+      MinimapCapitalsDeletedIcons = {
+        ['*'] = {},
+      },
+    },
+
+    --12 FogOfWarColor
+    FogOfWarColor = {
+      --FogOfWar
+      colorR = 1,
+      colorG = 1,
+      colorB = 1,
+      colorA = 1,
+      FogOfWarColorR = 1,
+      FogOfWarColorG = 0,
+      FogOfWarColorB = 0,
+      FogOfWarColorA = 1,
+      colorR_Reduce = 0.65,
+      colorG_Reduce = 0.65,
+      colorB_Reduce = 0.65,
+      colorA_Reduce = 0.65,
+    },
+
+    --13 CoordsDisplay
+    displayCoords =  {
+      showPlayerCoords = false,
+      showMouseCoords = false,
+      PlayerCoordsSize = 0.7,
+      PlayerCoordsAlpha = 1,
+      MouseCoordsSize = 0.7,
+      MouseCoordsAlpha = 1,
+    },
+
+    --14 AreaMap
+    areaMap = {
+      showAreaMapDropDownMenu = true,
+      showAreaMapDropDownMenuCapitalsIcons = true,
+      showAreaMapDropDownMenuZonesIcons = true,
+      showAreaMapUnexploredAreas = true,
+      areaMapScale = 1,
+      showAreaMapCoords = true,
+      areaMapFogOfWarColorR = 1,
+      areaMapFogOfWarColorG = 0,
+      areaMapFogOfWarColorB = 0,
+      areaMapFogOfWarColorA = 1,
+    },
+
   },
 }

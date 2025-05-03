@@ -26,7 +26,7 @@ if not db.activate.HideMapNote then
         -- Kalimdor Dungeons
             if self.db.profile.showContinentDungeons then
             nodes[12][53146914] = { id = 233, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Razorfen Downs 
-            nodes[12][42726722] = { id = 1276, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Dire Maul - Warpwood Quarter 
+            nodes[12][42726722] = { id = 230, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Dire Maul - Capital
             nodes[12][54187774] = { id = 241, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Zul'Farrak
             nodes[12][50916837] = { id = 234, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Razorfen Kraul 
             nodes[12][52519670] = { id = 68, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- The Vortex Pinnacle 

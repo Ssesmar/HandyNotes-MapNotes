@@ -27,29 +27,64 @@ function MapNotesMiniButton:OnInitialize() --mmb.lua
 end
 
 local function updateextraInformation()
-    table.wipe(extraInformations)
-    for i=1,GetNumSavedInstances() do
-        local name, _, _, _, locked, _, _, _, _, difficultyName, numEncounters, encounterProgress = GetSavedInstanceInfo(i)
-        if (locked) then
-          --print(name, difficultyName, numEncounters, encounterProgress)
-          if (not extraInformations[name]) then
-          extraInformations[name] = { }
-          end
-          extraInformations[name][difficultyName] = encounterProgress .. "/" .. numEncounters
-        end
+  table.wipe(extraInformations)
+
+  for i = 1, GetNumSavedInstances() do
+    local name, _, _, _, locked, _, _, _, _, difficultyName, numEncounters, encounterProgress = GetSavedInstanceInfo(i)
+    if locked then
+      local entry = extraInformations[name]
+      if not entry then
+        entry = {}
+        extraInformations[name] = entry
+      end
+      entry[difficultyName] = {
+        progress = encounterProgress,
+        total = numEncounters
+      }
     end
+  end
 end
 
+local instanceInfoInitFrame = CreateFrame("Frame")
+  instanceInfoInitFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+  instanceInfoInitFrame:SetScript("OnEvent", function()
+  updateextraInformation()
+end)
+
 local function ExtraToolTip()
-  if ns.Addon.db.profile.TooltipInformations == false then
-    ns.Addon.db.profile.ExtraTooltip = false
-    elseif ns.Addon.db.profile.TooltipInformations == true then
-      if not WorldMapFrame:IsShown() then
-        ns.Addon.db.profile.ExtraTooltip = false
-      elseif WorldMapFrame:IsShown() then
-        ns.Addon.db.profile.ExtraTooltip = true
-      end
+  local show = ns.Addon.db.profile.TooltipInformations and WorldMapFrame:IsShown()
+  ns.Addon.db.profile.ExtraTooltip = show or false
+end
+
+ns.bossNameCache = ns.bossNameCache or {}
+
+local function ShowBossNames(instanceID, tooltip)
+  if ns.bossNameCache[instanceID] then
+    for _, boss in ipairs(ns.bossNameCache[instanceID]) do
+      tooltip:AddLine("• " .. boss, 1, 1, 1)
+    end
+    return
   end
+
+  if not EJ_GetEncounterInfoByIndex then
+    LoadAddOn("Blizzard_EncounterJournal")
+  end
+
+  EJ_SelectInstance(instanceID)
+
+  C_Timer.After(0.5, function()
+    local bosses = {}
+    local i = 1
+    while true do
+      local bossName = EJ_GetEncounterInfoByIndex(i)
+      if not bossName then break end
+      bosses[#bosses + 1] = bossName
+      tooltip:AddLine("• " .. bossName, 1, 1, 1)
+      i = i + 1
+    end
+    ns.bossNameCache[instanceID] = bosses
+    tooltip:Show()
+  end)
 end
 
 local pluginHandler = { }
@@ -68,7 +103,11 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
     self.highlight:SetAlpha(1)
     self.highlight:SetAllPoints()
   end
-  self.highlight:SetTexture(self.texture:GetTexture())
+
+  if self.highlight:GetTexture() ~= self.texture:GetTexture() then
+    self.highlight:SetTexture(self.texture:GetTexture())
+  end
+
   self.highlight:Show()
 
   -- highlight icon level
@@ -122,13 +161,13 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
         --print("Dungeon/Raid is locked")
 	      for a,b in pairs(extraInformations[v]) do
           --tooltip:AddLine(v .. ": " .. a .. " " .. b, nil, nil, nil, false)
-	        tooltip:AddDoubleLine(v, a .. " " .. b, 1, 1, 1, 1, 1, 1)
+	        tooltip:AddDoubleLine(v, a .. " " .. b.progress .. "/" .. b.total, 1, 1, 1, 1, 1, 1)
  	      end
 	    end
       if (lfgIDs[v] and extraInformations[lfgIDs[v]]) then
         for a,b in pairs(extraInformations[lfgIDs[v]]) do
           --tooltip:AddLine(v .. ": " .. a .. " " .. b, nil, nil, nil, false)
-          tooltip:AddDoubleLine(v, a .. " " .. b, 1, 1, 1, 1, 1, 1)
+          tooltip:AddDoubleLine(v, a .. " " .. b.progress .. "/" .. b.total, 1, 1, 1, 1, 1, 1)
         end
       end
 	  else
@@ -272,111 +311,70 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
 
     end
 
-    -- Dungeons ,Raids and Multi
-    if nodeData.type then
-
-      -- Dungeons
-      if nodeData.id and nodeData.type == "Dungeon" and not ns.MapType0 then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
+    if nodeData.type and not ns.MapType0 then
+      local dungeonTypes = {
+        ["Dungeon"] = true,
+        ["PassageDungeon"] = true,
+        ["PassageDungeonMulti"] = true,
+        ["VInstanceD"] = true,
+        ["MultiVInstanceD"] = true,
+        ["MultipleD"] = true
+      }
+    
+      local raidTypes = {
+        ["Raid"] = true,
+        ["PassageRaid"] = true,
+        ["PassageRaidMulti"] = true,
+        ["VInstanceR"] = true,
+        ["MultipleR"] = true
+      }
+    
+      local mixedTypes = {
+        ["MultiVInstanceR"] = true,
+        ["MultiVInstance"] = true
+      }
+    
+      if (dungeonTypes[nodeData.type] and (nodeData.id or nodeData.mnID)) or
+         (nodeData.type == "PassageDungeon" and nodeData.id and not nodeData.mnID) then
+        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON)
       end
-
-      if nodeData.id and nodeData.lfgid and nodeData.type == "PassageDungeon" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
+    
+      if (raidTypes[nodeData.type] and (nodeData.id or nodeData.mnID)) or
+         (nodeData.type == "PassageRaid" and nodeData.id and not nodeData.mnID) then
+        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID)
       end
-
-      if nodeData.id and nodeData.type == "PassageDungeon" and not nodeData.mnID then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
+    
+      if mixedTypes[nodeData.type] and nodeData.mnID then
+        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID .. " & " .. CALENDAR_TYPE_DUNGEON)
       end
-
-      if nodeData.mnID and nodeData.type == "PassageDungeonMulti" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
-      end
-
-      if nodeData.mnID and nodeData.type == "VInstanceD" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
-      end
-
-      if nodeData.mnID and nodeData.type == "MultiVInstanceD" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
-      end
-
-      if nodeData.mnID and nodeData.type == "MultipleD" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
-      end
-
-      -- Raids
-      if nodeData.type == "Raid" and not ns.MapType0 then 
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID, nil, nil, false)
-      end
-
-      if nodeData.id and nodeData.type == "PassageRaid" and not nodeData.mnID then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID, nil, nil, false)
-      end
-
-      if nodeData.mnID and nodeData.type == "PassageRaidMulti" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID, nil, nil, false)
-      end
-
-      if nodeData.mnID and nodeData.type == "MultiVInstanceR" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID .. " & " .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
-      end
-
-      if nodeData.mnID and nodeData.type == "VInstanceR" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID, nil, nil, false)
-      end
-
-      if nodeData.mnID and nodeData.type == "MultipleR" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID, nil, nil, false)
-      end
-
-      -- Mixed Raid & Dungeon
-      if nodeData.mnID and nodeData.type == "MultiVInstance" then
-        tooltip:AddDoubleLine("|cffffffff" .. CALENDAR_TYPE_RAID .. " & " .. CALENDAR_TYPE_DUNGEON, nil, nil, false)
-      end
-
     end
 
     -- Boss names
     if ns.Addon.db.profile.BossNames then
       if nodeData.id and type(nodeData.id) ~= "table" then
         local instanceID = nodeData.id
-      
         tooltip:AddLine(" ")
-      
-        if nodeData.type == "Raid" or nodeData.type == "PassageRaid" or nodeData.type == "PassageRaidMulti" or nodeData.type == "VInstanceR" or nodeData.type == "MultipleR" 
-          or nodeData.type == "MultiVInstanceR" then
-          tooltip:AddLine(L["Bosses in this raid"])
-          
-        elseif nodeData.type == "Dungeon" or nodeData.type == "PassageDungeon" or nodeData.type == "PassageDungeonMulti" or nodeData.type == "VInstanceD" or nodeData.type == "MultiVInstanceD" 
-          or nodeData.type == "MultipleD" then
-          tooltip:AddLine(L["Bosses in this dungeon"])
-          
-        elseif nodeData.type == "MultiVInstance" then
-          tooltip:AddLine(L["Bosses in this instance"])
-        else
-          tooltip:AddLine(L["Bosses in this instance"])
-        end
-      
-        -- load encounter journal
-        if not EJ_GetEncounterInfoByIndex or not EJ_GetInstanceInfo then
-          local loaded, reason = LoadAddOn("Blizzard_EncounterJournal")
-          if not loaded then
-            tooltip:AddLine("|cffff0000[Fehler]: Encounter Journal not avaible (" .. (reason or "?") .. ")")
-            return
-          end
-        end
-      
-        -- select instance
-        EJ_SelectInstance(instanceID)
-      
-        -- show boss names
-        local i = 1
-        while true do
-          local bossName = EJ_GetEncounterInfoByIndex(i)
-          if not bossName then break end
-          tooltip:AddLine("• " .. bossName, 1, 1, 1)
-          i = i + 1
-        end
+
+        local typeTextMap = {
+          Raid = L["Bosses in this raid"],
+          PassageRaid = L["Bosses in this raid"],
+          PassageRaidMulti = L["Bosses in this raid"],
+          VInstanceR = L["Bosses in this raid"],
+          MultipleR = L["Bosses in this raid"],
+          MultiVInstanceR = L["Bosses in this raid"],
+
+          Dungeon = L["Bosses in this dungeon"],
+          PassageDungeon = L["Bosses in this dungeon"],
+          PassageDungeonMulti = L["Bosses in this dungeon"],
+          VInstanceD = L["Bosses in this dungeon"],
+          MultiVInstanceD = L["Bosses in this dungeon"],
+          MultipleD = L["Bosses in this dungeon"],
+
+          MultiVInstance = L["Bosses in this instance"],
+        }
+
+        tooltip:AddLine(typeTextMap[nodeData.type] or L["Bosses in this instance"])
+        ShowBossNames(instanceID, tooltip)
       end
     end
 
@@ -410,7 +408,7 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
                 tooltip:AddDoubleLine(TextIconInfo:GetIconString() .. " " .. "|cff00ff00" .. L["Shift + Right Click on a MapNotes icon adds a waypoint to it"], nil, nil, false)
               end
             end
-            
+
           end
         elseif ns.Addon.db.profile.activate.ShiftWorld then
 
@@ -429,7 +427,7 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
                 tooltip:AddDoubleLine(TextIconInfo:GetIconString() .. " " .. "|cff00ff00" .. L["Shift + Right Click on a MapNotes icon adds a waypoint to it"], nil, nil, false)
               end
             end
-    
+
           end
 
         end
@@ -457,7 +455,7 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
         if ns.Addon.db.profile.tomtom then
           tooltip:AddDoubleLine("|cff00ff00" .. L["Shift + Right Click on a MapNotes icon adds a waypoint to it"], nil, nil, false)
         end
-        
+
         if not ns.Addon.db.profile.activate.ShiftWorld then 
           tooltip:AddDoubleLine(TextIconInfo:GetIconString() .. " " .. "|cff00ff00" .. "< " .. MIDDLE_BUTTON_STRING .. " " .. INSTANCE_LEAVE .. " (" .. DELVES_LABEL .. ") >", nil, nil, false)
         elseif ns.Addon.db.profile.activate.ShiftWorld then
@@ -1190,6 +1188,7 @@ do
       -- X = 6 =	Orphan 	
 
       if t.uiMapId == 948 -- Mahlstrom Continent 
+        or t.uiMapId == 905 -- Argus Continent
         or (mapInfo.mapType == 0 and (ns.dbChar.AzerothDeletedIcons[t.uiMapId] and not ns.dbChar.AzerothDeletedIcons[t.uiMapId][state])) -- Cosmos
         or (mapInfo.mapType == 1 and (ns.dbChar.AzerothDeletedIcons[t.uiMapId] and not ns.dbChar.AzerothDeletedIcons[t.uiMapId][state])) -- Azeroth
         or (not ns.CapitalIDs and (mapInfo.mapType == 4 or mapInfo.mapType == 6) and (ns.dbChar.DungeonDeletedIcons[t.uiMapId] and not ns.dbChar.DungeonDeletedIcons[t.uiMapId][state])) -- Dungeon
@@ -1692,6 +1691,10 @@ function Addon:OnProfileChanged(event, database, profileKeys)
 
   ns.ApplySavedCoords()
   ns.ReloadAreaMapSettings()
+
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
   
   HandyNotes:GetModule("FogOfWarButton"):Refresh()
   if ns.Addon.db.profile.CoreChatMassage then
@@ -1710,9 +1713,12 @@ function Addon:OnProfileReset(event, database, profileKeys)
   ns.DefaultMouseCoords()
   ns.DefaultPlayerAlpha()
   ns.DefaultMouseAlpha()
-  ns.HidePlayerCoordsFrame()
-  ns.HideMouseCoordsFrame()
   ns.UpdateAreaMapFogOfWar()
+  ns.ResetAreaMapToPlayerLocation()
+
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
 
   wipe(ns.dbChar.CapitalsDeletedIcons)
   wipe(ns.dbChar.MinimapCapitalsDeletedIcons)
@@ -1739,6 +1745,10 @@ function Addon:OnProfileCopied(event, database, profileKeys)
 
   ns.ApplySavedCoords()
   ns.ReloadAreaMapSettings()
+
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
 
   HandyNotes:GetModule("FogOfWarButton"):Refresh()
   if ns.Addon.db.profile.CoreChatMassage then
@@ -2039,8 +2049,7 @@ function Addon:UpdateInstanceNames(node)
 end
 
 function Addon:ProcessTable()
-  table.wipe(lfgIDs)
-  ns.lfgIDs = lfgIDs
+  lfgIDs = ns.lfgIDs
 
   function Addon:UpdateAlter(id, name)
     if (lfgIDs[id]) then

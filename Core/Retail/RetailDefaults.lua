@@ -172,7 +172,7 @@ ns.defaults = {
       ZoneChangedDetail = false,
       TooltipInformations = true,
       DeleteIcons = false,
-      CreateAndCopyLinks = true,
+      CreateAndCopyLinks = false,
       RestoreAllIcons = false,
       RestoreZoneDeletedIcons = false,
       RestoreContinentDeletedIcons = false,
@@ -706,12 +706,11 @@ ns.defaults = {
 
       --14 AreaMap
       areaMap = {
-        showAreaMapDropDownMenu = true,
-        showAreaMapDropDownMenuCapitalsIcons = true,
-        showAreaMapDropDownMenuZonesIcons = true,
-        showAreaMapUnexploredAreas = true,
+        showAreaMapDropDownMenu = false,
+        showAreaMapDropDownMenuCapitalsIcons = false,
+        showAreaMapDropDownMenuZonesIcons = false,
+        showAreaMapUnexploredAreas = false,
         areaMapScale = 1,
-        showAreaMapCoords = true,
         areaMapFogOfWarColorR = 1,
         areaMapFogOfWarColorG = 0,
         areaMapFogOfWarColorB = 0,

@@ -24,24 +24,6 @@ function ns.AreaMap()
   ns.AreaMapIcons = AreaMapIcons
   ns.AreaMapIconPool = AreaMapIconPool
 
-  local areaMapTicker
-
-  local function StartAreaMapTicker()
-    if areaMapTicker then return end
-    areaMapTicker = C_Timer.NewTicker(3, function()
-      if ns.AreaMapFrame:IsShown() and WorldMapFrame:IsShown() then
-        ns.UpdateAreaMapIcons()
-      end
-    end)
-  end
-
-  local function StopAreaMapTicker()
-    if areaMapTicker then
-      areaMapTicker:Cancel()
-      areaMapTicker = nil
-    end
-  end
-
   ns.childMapIDs = {
     88, 84, 87, 89, 103, 85, 90, 86, 110, 111, 125, 126,
     391, 392, 393, 394, 407, 503, 582, 590, 622, 624, 626,
@@ -54,52 +36,49 @@ function ns.AreaMap()
       ns.showAreaMapDropDownMenu = ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu
 
       if ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons == nil then
-        ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons = true
+        ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons = false
       end
 
       if ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuCapitalsIcons == nil then
-        ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuCapitalsIcons = true
-      end
-
-      if ns.Addon.db.profile.areaMap.showAreaMapCoords == nil then
-        ns.Addon.db.profile.areaMap.showAreaMapCoords = true
+        ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuCapitalsIcons = false
       end
 
       ns.areaMapScale = ns.Addon.db.profile.areaMap.areaMapScale or 1.0
     end
   end
 
-  local lastUpdate = 0
-
-  local function GetScrollContainer()
-    local mapID = C_Map.GetBestMapForUnit("player")
-    local isChildMap = tContains(ns.childMapIDs, mapID)
-    return ns.AreaMapFrame.ScrollContainer.Child, isChildMap
-  end
-
-  function ns.UpdateAreaMapIcons()
-    local now = GetTime()
-    if now - lastUpdate < 0.5 then return end
-    lastUpdate = now
+  ns.lastAreaMapID = ns.lastAreaMapID or nil
+  
+  function ns.UpdateAreaMapIcons() 
     if not ns.AreaMapFrame or not ns.AreaMapFrame:IsShown() then return end
-
-    for _, pin in ipairs(AreaMapIcons) do
-      pin:Hide()
-      table.insert(AreaMapIconPool, pin)
-    end
-    wipe(AreaMapIcons)
-
     if not ns.showAreaMapDropDownMenu then return end
+  
     local mapID = BattlefieldMapFrame:GetMapID()
     if not mapID or not ns.nodes[mapID] then return end
-
-    local ScrollContainer, isChildMap = GetScrollContainer()
-
-    if ScrollContainer:GetWidth() == 0 or ScrollContainer:GetHeight() == 0 then
-      C_Timer.After(0.1, ns.UpdateAreaMapIcons)
+  
+    -- Aktualisieren nur bei Mapwechsel
+    if ns.lastAreaMapID == mapID and #ns.AreaMapIcons > 0 then return end
+    ns.lastAreaMapID = mapID
+  
+    local ScrollContainer, isChildMap = ns.AreaMapFrame.ScrollContainer.Child, tContains(ns.childMapIDs, mapID)
+    local width, height = ScrollContainer:GetWidth(), ScrollContainer:GetHeight()
+  
+    if width == 0 or height == 0 then
+      C_Timer.After(0.2, ns.UpdateAreaMapIcons)
       return
     end
-
+  
+    -- Symbolgröße berechnen
+    local scaleFactor = math.min(width, height)
+    local size = (scaleFactor * 0.05) * (ns.areaMapScale or 1.0)
+  
+    -- Vorhandene Icons zurück in den Pool
+    for _, pin in ipairs(ns.AreaMapIcons) do
+      pin:Hide()
+      table.insert(ns.AreaMapIconPool, pin)
+    end
+    wipe(ns.AreaMapIcons)
+  
     for coord, node in pairs(ns.nodes[mapID]) do
       if node and node.showInZone then
         local shouldShow = false
@@ -108,74 +87,69 @@ function ns.AreaMap()
         elseif not isChildMap and ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons then
           shouldShow = true
         end
-
+  
         if shouldShow then
           local x, y = HandyNotes:getXY(coord)
           if x and y and x >= 0 and x <= 1 and y >= 0 and y <= 1 then
-            local pin = tremove(AreaMapIconPool) or CreateFrame("Button", nil, ScrollContainer)
+            local pin = tremove(ns.AreaMapIconPool) or CreateFrame("Button", nil, ScrollContainer)
             pin:SetParent(ScrollContainer)
             pin:SetFrameStrata("HIGH")
-
-            local width = ScrollContainer:GetWidth()
-            local height = ScrollContainer:GetHeight()
-            local scaleFactor = math.min(width, height)
-            local size = (scaleFactor * 0.05) * (ns.areaMapScale or 1.0)
             pin:SetSize(size, size)
-
-            local tex = pin.texture
-            if not tex then
-              tex = pin:CreateTexture(nil, "OVERLAY")
+  
+            if not pin.texture then
+              local tex = pin:CreateTexture(nil, "OVERLAY")
               tex:SetAllPoints()
               pin.texture = tex
             end
-
+  
             local iconPath = ns.icons[node.type] or "Interface\\Icons\\INV_Misc_QuestionMark"
-            if tex:GetTexture() ~= iconPath then
-              tex:SetTexture(iconPath)
-            end
-
-            tex:Show()
-            tex:SetAlpha(1)
+            pin.texture:SetTexture(iconPath)
+            pin.texture:SetAlpha(1)
+            pin.texture:Show()
+  
             pin:Show()
             pin:SetAlpha(1)
-
+            pin:SetPoint("CENTER", ScrollContainer, "TOPLEFT", x * width, -y * height)
+  
             pin.coord = coord
             pin.uiMapID = mapID
-            pin:SetPoint("CENTER", ScrollContainer, "TOPLEFT", x * width, -y * height)
-
-            pin:SetScript("OnEnter", function(self)
-              if self.lastTooltipCoord ~= self.coord or self.lastTooltipMapID ~= self.uiMapID then
-                ns.pluginHandler.OnEnter(self, self.uiMapID, self.coord)
-                self.lastTooltipCoord = self.coord
-                self.lastTooltipMapID = self.uiMapID
-              end
-            end)
-
-            pin:SetScript("OnLeave", function(self)
-              ns.pluginHandler.OnLeave(self, self.uiMapID, self.coord)
-              self.lastTooltipCoord = nil
-              self.lastTooltipMapID = nil
-            end)
-
-            pin:SetScript("OnClick", function(self, button)
-              local coord = self.coord
-              local uiMapID = self.uiMapID
-              local node = ns.nodes[uiMapID] and ns.nodes[uiMapID][coord]
-              if not node then return end
-              if node.mnID then
-                BattlefieldMapFrame:SetMapID(node.mnID)
-                ns.UpdateAreaMapIcons()
-              else
-                ns.pluginHandler.OnClick(ns.pluginHandler, button, true, uiMapID, coord)
-              end
-            end)
-
-            table.insert(AreaMapIcons, pin)
+  
+            if not pin._scriptsInitialized then
+              pin:SetScript("OnEnter", function(self)
+                if self.lastTooltipCoord ~= self.coord or self.lastTooltipMapID ~= self.uiMapID then
+                  ns.pluginHandler.OnEnter(self, self.uiMapID, self.coord)
+                  self.lastTooltipCoord = self.coord
+                  self.lastTooltipMapID = self.uiMapID
+                end
+              end)
+  
+              pin:SetScript("OnLeave", function(self)
+                ns.pluginHandler.OnLeave(self, self.uiMapID, self.coord)
+                self.lastTooltipCoord = nil
+                self.lastTooltipMapID = nil
+              end)
+  
+              pin:SetScript("OnClick", function(self, button)
+                local node = ns.nodes[self.uiMapID] and ns.nodes[self.uiMapID][self.coord]
+                if not node then return end
+                if node.mnID then
+                  BattlefieldMapFrame:SetMapID(node.mnID)
+                  ns.UpdateAreaMapIcons()
+                else
+                  ns.pluginHandler.OnClick(ns.pluginHandler, button, true, self.uiMapID, self.coord)
+                end
+              end)
+  
+              pin._scriptsInitialized = true
+            end
+  
+            table.insert(ns.AreaMapIcons, pin)
           end
         end
       end
     end
   end
+  
 
   local function loadAreaMapMapNotes()
     LoadAreaMapSetting()
@@ -195,16 +169,6 @@ function ns.AreaMap()
       ns.AreaMapFrame:HookScript("OnShow", function()
         ns.UpdateAreaMapIcons()
         ns.UpdateAreaMapFogOfWar()
-      
-        if ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu and ns.Addon.db.profile.areaMap.showAreaMapCoords then
-          if not ns.AreaMapMouseCoordsFrame and ns.CreateAreaMapMouseCoordsFrame then
-            ns.CreateAreaMapMouseCoordsFrame()
-          end
-          if ns.AreaMapMouseCoordsFrame then
-            ns.AreaMapMouseCoordsFrame:Show()
-            ns.EnableAreaMapUpdate()
-          end
-        end
       end)
       
     
@@ -214,41 +178,15 @@ function ns.AreaMap()
       end)
     
       hooksecurefunc(ns.AreaMapFrame.ScrollContainer, "SetPanTarget", ns.UpdateAreaMapIcons)
-    
-      BattlefieldMapFrame:HookScript("OnShow", function()
-        if ns.showAreaMapDropDownMenu then StartAreaMapTicker() end
-      end)
-    
-      BattlefieldMapFrame:HookScript("OnHide", function()
-        StopAreaMapTicker()
-      
-        if ns.AreaMapMouseCoordsFrame then
-          ns.AreaMapMouseCoordsFrame:Hide()
-        end
-      end)
-    
-      if ns.AreaMapFrame:IsShown() then
-        ns.UpdateAreaMapIcons()
-      end
     end)
-    
 
     WorldMapFrame:HookScript("OnShow", function()
+
+
+
       if ns.AreaMapFrame and ns.AreaMapFrame:IsShown() then
         C_Timer.After(0.05, ns.UpdateAreaMapIcons)
       end
-    end)
-
-    C_Timer.After(0.5, function()
-      if ns.AreaMapMouseCoordsFrame then return end
-      if not ns.Addon.db.profile then return end
-    
-      local db = ns.Addon.db.profile.areaMap
-      if not db.showAreaMapDropDownMenu or not db.showAreaMapCoords then return end
-      if not ns.CreateAreaMapMouseCoordsFrame then return end
-      if not BattlefieldMapFrame:IsShown() then return end
-    
-      ns.CreateAreaMapMouseCoordsFrame()
     end)
 
   end
@@ -535,34 +473,7 @@ function ns.CreateMapNotesDropdown()
     else
       print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " |cffffff00" .. L["Zones"] .. " " .. L["icons"] .. " |cffff0000" .. L["are hidden"])
     end
-  end
-
-  local function ToggleAreaMapMouseCoords()
-    ns.Addon.db.profile.areaMap.showAreaMapCoords = not ns.Addon.db.profile.areaMap.showAreaMapCoords
-  
-    if not ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu then
-      return
-    end
-
-    if ns.Addon.db.profile.areaMap.showAreaMapCoords then
-      if not ns.AreaMapMouseCoordsFrame then
-        ns.CreateAreaMapMouseCoordsFrame()
-      end
-      if ns.AreaMapMouseCoordsFrame then
-        ns.AreaMapMouseCoordsFrame:Show()
-      end
-      ns.EnableAreaMapUpdate()
-    else
-      if ns.AreaMapMouseCoordsFrame then
-        ns.AreaMapMouseCoordsFrame:Hide()
-      end
-      ns.DisableAreaMapUpdate()
-    end
-  
-    if ns.UpdateAreaMapIcons then ns.UpdateAreaMapIcons() end
-    if ns.RefreshDropdown then ns.RefreshDropdown() end
-  end
-  
+  end  
 
   function ToggleAreaMapUnexploredAreas()
     local db = ns.Addon.db.profile.areaMap
@@ -580,15 +491,6 @@ function ns.CreateMapNotesDropdown()
   
 
   function InitializeDropdown(self, level)
-
-    UIDropDownMenu_AddButton({
-      text = L["Coordinates"] .. "-" .. DISPLAY,
-      func = ToggleAreaMapMouseCoords,
-      checked = ns.Addon.db.profile.areaMap.showAreaMapCoords,
-      keepShownOnClick = false,
-    }, level)    
-
-    UIDropDownMenu_AddSeparator(level)
 
     UIDropDownMenu_AddButton({
       text = L["Capitals"] .. " " .. L["icons"],
@@ -668,12 +570,11 @@ function ns.OpenSharedFogOfWarColorPicker()
     else
       for pin in WorldMapFrame:EnumeratePinsByTemplate("MapExplorationPinTemplate") do
         if pin.RefreshOverlays then
-          pin:RefreshOverlays(true)
+          pcall(function() pin:RefreshOverlays(true) end)
         end
       end
     end
   end
-  
 
   local function callback()
     local nr, ng, nb = ColorPickerFrame:GetColorRGB()
@@ -778,7 +679,6 @@ function ns.SaveDropDownStates()
   ns.savedDropdownStates = {
     showZoneIcons = ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons,
     showCapitalIcons = ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuCapitalsIcons,
-    showCoords = ns.Addon.db.profile.areaMap.showAreaMapCoords,
     showUnexplored = ns.Addon.db.profile.areaMap.showAreaMapUnexploredAreas,
   }
 end
@@ -788,7 +688,6 @@ function ns.LoadDropDownStates()
 
   ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons = ns.savedDropdownStates.showZoneIcons
   ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuCapitalsIcons = ns.savedDropdownStates.showCapitalIcons
-  ns.Addon.db.profile.areaMap.showAreaMapCoords = ns.savedDropdownStates.showCoords
   ns.Addon.db.profile.areaMap.showAreaMapUnexploredAreas = ns.savedDropdownStates.showUnexplored
 
   if ns.ResetMapIDButton then
@@ -806,25 +705,9 @@ function ns.ReloadAreaMapSettings()
 
   ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons = ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuZonesIcons
   ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuCapitalsIcons = ns.Addon.db.profile.areaMap.showAreaMapDropDownMenuCapitalsIcons
-  ns.Addon.db.profile.areaMap.showAreaMapCoords = ns.Addon.db.profile.areaMap.showAreaMapCoords
   ns.areaMapScale = ns.Addon.db.profile.areaMap.areaMapScale or 1.0
 
   ns.UpdateAreaMapIcons()
-
-  if ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu and ns.Addon.db.profile.areaMap.showAreaMapCoords then
-    if not ns.AreaMapMouseCoordsFrame then
-      ns.CreateAreaMapMouseCoordsFrame()
-    end
-    if ns.AreaMapMouseCoordsFrame then
-      ns.AreaMapMouseCoordsFrame:Show()
-    end
-    ns.EnableAreaMapUpdate()
-  else
-    if ns.AreaMapMouseCoordsFrame then
-      ns.AreaMapMouseCoordsFrame:Hide()
-    end
-    ns.DisableAreaMapUpdate()
-  end
 
   ns.RefreshDropdown()
   ns.UpdateAreaMapFogOfWar()
@@ -845,28 +728,7 @@ function ns.SetAreaMapZoneIconsVisibility(state)
   if ns.UpdateAreaMapIcons then ns.UpdateAreaMapIcons() end
 end
 
-function ns.SetAreaMapCoordsVisibility(state)
-  ns.Addon.db.profile.areaMap.showAreaMapCoords = state
-
-  if ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu and state and ns.CreateAreaMapMouseCoordsFrame then
-    ns.CreateAreaMapMouseCoordsFrame()
-    if ns.AreaMapMouseCoordsFrame then
-      ns.AreaMapMouseCoordsFrame:Show()
-      ns.EnableAreaMapUpdate()
-    end  
-  elseif ns.AreaMapMouseCoordsFrame then
-    ns.AreaMapMouseCoordsFrame:Hide()
-    ns.DisableAreaMapUpdate()
-  end
-
-  if ns.RefreshDropdown then ns.RefreshDropdown() end
-  if ns.UpdateAreaMapIcons then ns.UpdateAreaMapIcons() end
-end
-
-
-
 function ns.UpdateAreaMapSettings()
-  ns.Addon.db.profile.areaMap.showAreaMapCoords = ns.Addon.db.profile.areaMap.showAreaMapCoords
   ns.RefreshDropdown()
 end
 
@@ -880,17 +742,21 @@ end
 function ns.SetAreaMapMenuVisibility(state)
   ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu = state
 
-  if BattlefieldMapFrame and BattlefieldMapFrame.MapNotesDropdown then
-    if state then
-      BattlefieldMapFrame.MapNotesDropdown:Show()
-    else
-      BattlefieldMapFrame.MapNotesDropdown:Hide()
+  if state then
+    if BattlefieldMapFrame and BattlefieldMapFrame:IsShown() and not BattlefieldMapFrame.MapNotesDropdown then
+      ns.CreateMapNotesDropdown()
+    end
+    if ns.ResetMapIDButton == nil and ns.CreateResetMapIDButton then
+      ns.CreateResetMapIDButton()
     end
   end
 
-  if not state and ns.AreaMapMouseCoordsFrame then
-    ns.AreaMapMouseCoordsFrame:Hide()
-    ns.DisableAreaMapUpdate()
+  if BattlefieldMapFrame and BattlefieldMapFrame.MapNotesDropdown then
+    BattlefieldMapFrame.MapNotesDropdown:SetShown(state)
+  end
+  
+  if ns.ResetMapIDButton then
+    ns.ResetMapIDButton:SetShown(state)
   end
 end
 
@@ -922,15 +788,6 @@ function ns.showAreaMapDropDownMenuSettingsforOptionsFile(val)
           ns.UpdateAreaMapFogOfWar()
         end
 
-        if ns.Addon.db.profile.areaMap.showAreaMapCoords then
-          if not ns.AreaMapMouseCoordsFrame and ns.CreateAreaMapMouseCoordsFrame then
-            ns.CreateAreaMapMouseCoordsFrame()
-          end
-          if ns.AreaMapMouseCoordsFrame then
-            ns.AreaMapMouseCoordsFrame:Show()
-            ns.EnableAreaMapUpdate()
-          end
-        end
       end
       
     end
@@ -943,10 +800,6 @@ function ns.showAreaMapDropDownMenuSettingsforOptionsFile(val)
 
     if ns.UpdateAreaMapIcons then
       ns.UpdateAreaMapIcons()
-    end
-
-    if ns.AreaMapMouseCoordsFrame then
-      ns.AreaMapMouseCoordsFrame:Hide()
     end
 
     if ns.ResetMapIDButton then
@@ -968,10 +821,13 @@ function ns.showAreaMapDropDownMenuSettingsforOptionsFile(val)
 
 end
 
-do
-  local lastR, lastG, lastB, lastA = 0, 0, 0, 0
+function ns.StartFogOfWarColorSyncTicker()
+  if ns._fogColorTicker then return end
 
-  C_Timer.NewTicker(0.5, function()
+  local lastR, lastG, lastB, lastA = 0, 0, 0, 0
+  local noChangeCounter = 0
+
+  ns._fogColorTicker = C_Timer.NewTicker(0.3, function()
     local db = ns.Addon and ns.Addon.db and ns.Addon.db.profile
     if not db or not db.FogOfWarColor then return end
 
@@ -982,10 +838,23 @@ do
 
     if r ~= lastR or g ~= lastG or b ~= lastB or a ~= lastA then
       lastR, lastG, lastB, lastA = r, g, b, a
+      noChangeCounter = 0
 
       if ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu and ns.AreaMapFrame and ns.AreaMapFrame:IsShown() then
         ns.UpdateAreaMapFogOfWar()
       end
+    else
+      noChangeCounter = noChangeCounter + 1
+      if noChangeCounter >= 10 then 
+        ns.StopFogOfWarColorSyncTicker()
+      end
     end
   end)
+end
+
+function ns.StopFogOfWarColorSyncTicker()
+  if ns._fogColorTicker then
+    ns._fogColorTicker:Cancel()
+    ns._fogColorTicker = nil
+  end
 end

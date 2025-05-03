@@ -23,19 +23,65 @@ function MapNotesMiniButton:OnInitialize() --mmb.lua
   MNMMBIcon:Register("MNMiniMapButton", ns.miniButton, self.db.profile.minimap)
 end
 
-
 local function updateextraInformation()
-    table.wipe(extraInformations)
-    for i=1,GetNumSavedInstances() do
-        local name, _, _, _, locked, _, _, _, _, difficultyName, numEncounters, encounterProgress = GetSavedInstanceInfo(i)
-        if (locked) then
-          --print(name, difficultyName, numEncounters, encounterProgress)
-          if (not extraInformations[name]) then
-          extraInformations[name] = { }
-          end
-          extraInformations[name][difficultyName] = encounterProgress .. "/" .. numEncounters
-        end
+  table.wipe(extraInformations)
+
+  for i = 1, GetNumSavedInstances() do
+    local name, _, _, _, locked, _, _, _, _, difficultyName, numEncounters, encounterProgress = GetSavedInstanceInfo(i)
+    if locked then
+      local entry = extraInformations[name]
+      if not entry then
+        entry = {}
+        extraInformations[name] = entry
+      end
+      entry[difficultyName] = {
+        progress = encounterProgress,
+        total = numEncounters
+      }
     end
+  end
+end
+
+local instanceInfoInitFrame = CreateFrame("Frame")
+  instanceInfoInitFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+  instanceInfoInitFrame:SetScript("OnEvent", function()
+  updateextraInformation()
+end)
+
+local function ExtraToolTip()
+  local show = ns.Addon.db.profile.TooltipInformations and WorldMapFrame:IsShown()
+  ns.Addon.db.profile.ExtraTooltip = show or false
+end
+
+ns.bossNameCache = ns.bossNameCache or {}
+
+local function ShowBossNames(instanceID, tooltip)
+  if ns.bossNameCache[instanceID] then
+    for _, boss in ipairs(ns.bossNameCache[instanceID]) do
+      tooltip:AddLine("• " .. boss, 1, 1, 1)
+    end
+    return
+  end
+
+  if not EJ_GetEncounterInfoByIndex then
+    LoadAddOn("Blizzard_EncounterJournal")
+  end
+
+  EJ_SelectInstance(instanceID)
+
+  C_Timer.After(0.3, function()
+    local bosses = {}
+    local i = 1
+    while true do
+      local bossName = EJ_GetEncounterInfoByIndex(i)
+      if not bossName then break end
+      bosses[#bosses + 1] = bossName
+      tooltip:AddLine("• " .. bossName, 1, 1, 1)
+      i = i + 1
+    end
+    ns.bossNameCache[instanceID] = bosses
+    tooltip:Show()
+  end)
 end
 
 local pluginHandler = { }
@@ -86,7 +132,7 @@ function ns.pluginHandler:OnEnter(uiMapId, coord)
 
 	local instances = { strsplit("\n", nodeData.name) }
 
-
+  ExtraToolTip()
 	updateextraInformation()
 
   if ns.Addon.db.profile.BossNames then
@@ -104,13 +150,13 @@ function ns.pluginHandler:OnEnter(uiMapId, coord)
         --print("Dungeon/Raid is locked")
 	      for a,b in pairs(extraInformations[v]) do
           --tooltip:AddLine(v .. ": " .. a .. " " .. b, nil, nil, nil, false)
-	        tooltip:AddDoubleLine(v, a .. " " .. b, 1, 1, 1, 1, 1, 1)
+	        tooltip:AddDoubleLine(v, a .. " " .. b.progress .. "/" .. b.total, 1, 1, 1, 1, 1, 1)
  	      end
 	    end
       if (lfgIDs[v] and extraInformations[lfgIDs[v]]) then
         for a,b in pairs(extraInformations[lfgIDs[v]]) do
           --tooltip:AddLine(v .. ": " .. a .. " " .. b, nil, nil, nil, false)
-          tooltip:AddDoubleLine(v, a .. " " .. b, 1, 1, 1, 1, 1, 1)
+          tooltip:AddDoubleLine(v, a .. " " .. b.progress .. "/" .. b.total, 1, 1, 1, 1, 1, 1)
         end
       end
 	  else
@@ -243,43 +289,28 @@ function ns.pluginHandler:OnEnter(uiMapId, coord)
     if ns.Addon.db.profile.BossNames then
       if nodeData.id and type(nodeData.id) ~= "table" then
         local instanceID = nodeData.id
-      
         tooltip:AddLine(" ")
-      
-        if nodeData.type == "Raid" or nodeData.type == "PassageRaid" or nodeData.type == "PassageRaidMulti" or nodeData.type == "VInstanceR" or nodeData.type == "MultipleR" 
-          or nodeData.type == "MultiVInstanceR" then
-          tooltip:AddLine(L["Bosses in this raid"])
-          
-        elseif nodeData.type == "Dungeon" or nodeData.type == "PassageDungeon" or nodeData.type == "PassageDungeonMulti" or nodeData.type == "VInstanceD" or nodeData.type == "MultiVInstanceD" 
-          or nodeData.type == "MultipleD" then
-          tooltip:AddLine(L["Bosses in this dungeon"])
-          
-        elseif nodeData.type == "MultiVInstance" then
-          tooltip:AddLine(L["Bosses in this instance"])
-        else
-          tooltip:AddLine(L["Bosses in this instance"])
-        end
-      
-        -- Load Encounter Journal 
-        if not EJ_GetEncounterInfoByIndex or not EJ_GetInstanceInfo then
-          local loaded, reason = LoadAddOn("Blizzard_EncounterJournal")
-          if not loaded then
-            tooltip:AddLine("|cffff0000[Fehler]: Encounter Journal nicht verfügbar (" .. (reason or "?") .. ")")
-            return
-          end
-        end
-      
-        -- select instance
-        EJ_SelectInstance(instanceID)
-      
-        -- show boss names
-        local i = 1
-        while true do
-          local bossName = EJ_GetEncounterInfoByIndex(i)
-          if not bossName then break end
-          tooltip:AddLine("- " .. bossName, 1, 1, 1)
-          i = i + 1
-        end
+
+        local typeTextMap = {
+          Raid = L["Bosses in this raid"],
+          PassageRaid = L["Bosses in this raid"],
+          PassageRaidMulti = L["Bosses in this raid"],
+          VInstanceR = L["Bosses in this raid"],
+          MultipleR = L["Bosses in this raid"],
+          MultiVInstanceR = L["Bosses in this raid"],
+
+          Dungeon = L["Bosses in this dungeon"],
+          PassageDungeon = L["Bosses in this dungeon"],
+          PassageDungeonMulti = L["Bosses in this dungeon"],
+          VInstanceD = L["Bosses in this dungeon"],
+          MultiVInstanceD = L["Bosses in this dungeon"],
+          MultipleD = L["Bosses in this dungeon"],
+
+          MultiVInstance = L["Bosses in this instance"],
+        }
+
+        tooltip:AddLine(typeTextMap[nodeData.type] or L["Bosses in this instance"])
+        ShowBossNames(instanceID, tooltip)
       end
     end
 
@@ -528,7 +559,7 @@ do
       -- X = 6 =	Orphan 	
 
       if t.uiMapId == 948 -- Mahlstrom Continent 
-        or GetCurrentMapID == 2274 -- PTR: Khaz Algar - The War Within. Continent Scale atm on Beta a Zone not a Continent!!
+        or t.uiMapId == 905 -- Argus Continent
         or (mapInfo.mapType == 0 and (ns.dbChar.AzerothDeletedIcons[t.uiMapId] and not ns.dbChar.AzerothDeletedIcons[t.uiMapId][state])) -- Cosmos
         or (mapInfo.mapType == 1 and (ns.dbChar.AzerothDeletedIcons[t.uiMapId] and not ns.dbChar.AzerothDeletedIcons[t.uiMapId][state])) -- Azeroth
         or (not ns.CapitalIDs and (mapInfo.mapType == 4 or mapInfo.mapType == 6) and (ns.dbChar.DungeonDeletedIcons[t.uiMapId] and not ns.dbChar.DungeonDeletedIcons[t.uiMapId][state])) -- Dungeon
@@ -926,6 +957,10 @@ function Addon:OnProfileChanged(event, database, profileKeys)
   ns.ApplySavedCoords()
   ns.ReloadAreaMapSettings()
 
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
+
   HandyNotes:GetModule("FogOfWarButton"):Refresh()
   if ns.Addon.db.profile.CoreChatMassage then
     print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " ..
@@ -944,9 +979,12 @@ function Addon:OnProfileReset(event, database, profileKeys)
   ns.DefaultMouseCoords()
   ns.DefaultPlayerAlpha()
   ns.DefaultMouseAlpha()
-  ns.HidePlayerCoordsFrame()
-  ns.HideMouseCoordsFrame()
   ns.UpdateAreaMapFogOfWar()
+  ns.ResetAreaMapToPlayerLocation()
+
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
 
   wipe(ns.dbChar.CapitalsDeletedIcons)
   wipe(ns.dbChar.MinimapCapitalsDeletedIcons)
@@ -974,6 +1012,10 @@ function Addon:OnProfileCopied(event, database, profileKeys)
   ns.ApplySavedCoords()
   ns.ReloadAreaMapSettings()
 
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
+  
   HandyNotes:GetModule("FogOfWarButton"):Refresh()
   if ns.Addon.db.profile.CoreChatMassage then
     print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Profile has been adopted"])
@@ -1153,8 +1195,7 @@ function Addon:UpdateInstanceNames(node)
 end
 
 function Addon:ProcessTable()
-  table.wipe(lfgIDs)
-  ns.lfgIDs = lfgIDs
+  lfgIDs = ns.lfgIDs
 
   function Addon:UpdateAlter(id, name)
     if (lfgIDs[id]) then

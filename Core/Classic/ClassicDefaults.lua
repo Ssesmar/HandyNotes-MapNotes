@@ -11,7 +11,7 @@ ns.defaults = {
       assignedgray = true,
       graymultipleID = true,
       ChatMassage = false,
-      CreateAndCopyLinks = true,
+      CreateAndCopyLinks = false,
       RestoreZoneDeletedIcons = false,
       RestoreContinentDeletedIcons = false,
       RestoreAzerothDeletedIcons = false,
@@ -516,12 +516,11 @@ ns.defaults = {
 
     --14 AreaMap
     areaMap = {
-      showAreaMapDropDownMenu = true,
-      showAreaMapDropDownMenuCapitalsIcons = true,
-      showAreaMapDropDownMenuZonesIcons = true,
-      showAreaMapUnexploredAreas = true,
+      showAreaMapDropDownMenu = false,
+      showAreaMapDropDownMenuCapitalsIcons = false,
+      showAreaMapDropDownMenuZonesIcons = false,
+      showAreaMapUnexploredAreas = false,
       areaMapScale = 1,
-      showAreaMapCoords = true,
       areaMapFogOfWarColorR = 1,
       areaMapFogOfWarColorG = 0,
       areaMapFogOfWarColorB = 0,

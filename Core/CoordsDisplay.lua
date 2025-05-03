@@ -1,62 +1,7 @@
 local ADDON_NAME, ns = ...
 local L = LibStub("AceLocale-3.0"):GetLocale(ADDON_NAME)
 
-
-local function AreaMapUpdateFunc(self, elapsed)
-  self.timer = (self.timer or 0) + elapsed
-  self.lastX = self.lastX or 0
-  self.lastY = self.lastY or 0
-
-  while self.timer >= 0.1 do
-    self.timer = self.timer - 0.1
-
-    if not BattlefieldMapFrame or not BattlefieldMapFrame:IsShown() then
-      if self.lastX ~= 0 or self.lastY ~= 0 then
-        self.text:SetText(ns.COLORED_ADDON_NAME)
-        self.lastX, self.lastY = 0, 0
-      end
-      return
-    end
-
-    if not BattlefieldMapFrame:IsMouseOver() then
-      if self.lastX ~= 0 or self.lastY ~= 0 then
-        self.text:SetText("|cffff0000 00.00|r |cff00ccff 00.00|r")
-        self.lastX, self.lastY = 0, 0
-      end
-      return
-    end
-
-    local cursorX, cursorY = BattlefieldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
-    if cursorX and cursorY and cursorX >= 0 and cursorX <= 1 and cursorY >= 0 and cursorY <= 1 then
-      local x = math.floor(cursorX * 10000 + 0.5) / 100
-      local y = math.floor(cursorY * 10000 + 0.5) / 100
-      if x ~= self.lastX or y ~= self.lastY then
-        self.text:SetText(string.format("|cffff0000%.2f|r |cff00ccff%.2f|r", x, y))
-        self.lastX, self.lastY = x, y
-      end
-    else
-      if self.lastX ~= 0 or self.lastY ~= 0 then
-        self.text:SetText(ns.COLORED_ADDON_NAME)
-        self.lastX, self.lastY = 0, 0
-      end
-    end
-  end
-end
-
-
-function ns.EnableAreaMapUpdate()
-  if ns.AreaMapMouseCoordsFrame then
-    ns.AreaMapMouseCoordsFrame:SetScript("OnUpdate", AreaMapUpdateFunc)
-  end
-end
-
-function ns.DisableAreaMapUpdate()
-  if ns.AreaMapMouseCoordsFrame then
-    ns.AreaMapMouseCoordsFrame:SetScript("OnUpdate", nil)
-  end
-end
-
-function CreatePlayerCoordsFrame()
+function ns.CreatePlayerCoordsFrame()
   if not ns.Addon or not ns.Addon.db or not ns.Addon.db.profile.displayCoords.showPlayerCoords then return end
 
   local pos = ns.Addon.db.profile.displayCoords.player or {
@@ -75,7 +20,7 @@ function CreatePlayerCoordsFrame()
   playerFrame:SetSize(120, 30)
   playerFrame:SetPoint(pos.point, anchor, pos.relativePoint, pos.x, pos.y)
   playerFrame:SetScale(pos.scale or 1.0)
-  playerFrame:SetFrameStrata("TOOLTIP")
+  playerFrame:SetFrameStrata("HIGH")
   playerFrame:SetFrameLevel(10)
   playerFrame:SetMovable(true)
   playerFrame:EnableMouse(true)
@@ -134,6 +79,7 @@ function CreatePlayerCoordsFrame()
   end
 
   playerFrame:SetScript("OnUpdate", function(self, elapsed)
+    if not self:IsVisible() then return end
     self.timer = (self.timer or 0) + elapsed
     if self.timer >= 0.2 then
       UpdateCoords()
@@ -142,7 +88,7 @@ function CreatePlayerCoordsFrame()
   end)
 end
 
-function CreateMouseCoordsFrame()
+function ns.CreateMouseCoordsFrame()
   if not ns.Addon or not ns.Addon.db or not ns.Addon.db.profile.displayCoords.showMouseCoords then return end
   if not WorldMapFrame:IsShown() then return end 
 
@@ -166,8 +112,8 @@ function CreateMouseCoordsFrame()
   mouseFrame:SetSize(180, 30)
   mouseFrame:SetPoint(pos.point, anchor, pos.relativePoint, pos.x, pos.y)
   mouseFrame:SetScale(pos.scale or 1.0)
-  mouseFrame:SetFrameStrata("TOOLTIP")
-  mouseFrame:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 50)
+  mouseFrame:SetFrameStrata("HIGH")
+  mouseFrame:SetFrameLevel(WorldMapFrame:GetFrameLevel() + 5)
 
   mouseFrame:SetMovable(true)
   mouseFrame:EnableMouse(true)
@@ -234,6 +180,7 @@ function CreateMouseCoordsFrame()
   end
 
   mouseFrame:SetScript("OnUpdate", function(self, elapsed)
+    if not WorldMapFrame:IsShown() then return end
     self.timer = (self.timer or 0) + elapsed
     if self.timer >= 0.1 then
       UpdateMouseCoords()
@@ -259,67 +206,6 @@ function CreateMouseCoordsFrame()
 
 end
 
-function ns.CreateAreaMapMouseCoordsFrame()
-  if not ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu then return end
-  if not ns.Addon.db.profile.areaMap.showAreaMapCoords then return end
-
-  C_Timer.After(0.5, function()
-    if not BattlefieldMapFrame then return end
-
-    local AreaMapMouseFrame = CreateFrame("Frame", "AreaMapMouseCoordsFrame", UIParent, "BackdropTemplate")
-    AreaMapMouseFrame:SetSize(100, 25)
-    AreaMapMouseFrame:SetBackdrop({
-      bgFile = "Interface\\Buttons\\UI-SliderBar-Background",
-      edgeFile = "Interface\\Buttons\\UI-SliderBar-Border",
-      tile = false, tileSize = 8, edgeSize = 8,
-      insets = { left = 3, right = 3, top = 3, bottom = 3 }
-    })
-    AreaMapMouseFrame:SetBackdropColor(0, 0, 0, 0.6)
-    AreaMapMouseFrame:SetPoint("BOTTOM", BattlefieldMapFrame, "TOP", -22, 5)
-    AreaMapMouseFrame:SetParent(BattlefieldMapFrame)
-    AreaMapMouseFrame:SetFrameStrata("BACKGROUND")
-    AreaMapMouseFrame:SetFrameLevel(1)
-
-    local text = AreaMapMouseFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-    text:SetPoint("CENTER")
-    text:SetText(ns.COLORED_ADDON_NAME)
-    AreaMapMouseFrame.text = text
-
-    AreaMapMouseFrame:SetScript("OnUpdate", nil)
-    AreaMapMouseFrame:Hide()
-
-    ns.AreaMapMouseCoordsFrame = AreaMapMouseFrame
-
-    if ns.Addon and ns.Addon.db and ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu
-      and ns.Addon.db.profile.areaMap.showAreaMapCoords
-      and BattlefieldMapFrame:IsShown()
-    then
-      AreaMapMouseFrame:Show()
-      ns.EnableAreaMapUpdate()
-    end
-  end)
-end
-
-
-
-C_Timer.After(1, function()
-  if BattlefieldMapFrame then
-    BattlefieldMapFrame:HookScript("OnShow", function()
-      if ns.AreaMapMouseCoordsFrame and ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu and ns.Addon.db.profile.areaMap.showAreaMapCoords then
-        ns.EnableAreaMapUpdate()
-      end
-    end)
-    
-    BattlefieldMapFrame:HookScript("OnHide", function()
-      if ns.AreaMapMouseCoordsFrame then
-        ns.AreaMapMouseCoordsFrame:Hide()
-        ns.DisableAreaMapUpdate()
-      end
-    end)
-    
-  end
-end)
-
 function ns.HidePlayerCoordsFrame()
   if PlayerCoordsFrame then
     PlayerCoordsFrame:Hide()
@@ -340,10 +226,10 @@ end
 
 C_Timer.After(1, function()
   if ns.Addon and ns.Addon.db then
-    CreatePlayerCoordsFrame()
+    ns.CreatePlayerCoordsFrame()
 
     if WorldMapFrame:IsShown() and ns.Addon.db.profile.displayCoords.showMouseCoords then
-      CreateMouseCoordsFrame()
+      ns.CreateMouseCoordsFrame()
     end
   end
 end)
@@ -352,7 +238,7 @@ WorldMapFrame:HookScript("OnShow", function()
   if ns.Addon and ns.Addon.db and ns.Addon.db.profile.displayCoords.showMouseCoords then
     C_Timer.After(0.1, function()
       if not MouseCoordsFrame then
-        CreateMouseCoordsFrame()
+        ns.CreateMouseCoordsFrame()
       else
         local pos = ns.Addon.db.profile.displayCoords.mouse
         local anchor = _G[pos.relativeTo]
@@ -367,13 +253,11 @@ WorldMapFrame:HookScript("OnShow", function()
   end
 end)
 
-
 WorldMapFrame:HookScript("OnHide", function()
   if MouseCoordsFrame then
     MouseCoordsFrame:Hide()
   end
 end)
-
 
 function ns.DefaultPlayerCoords()
   local data = {
@@ -442,12 +326,12 @@ end
 
 function ns.showPlayerCoordsFrame()
   ns.Addon.db.profile.displayCoords.showPlayerCoords = true
-  CreatePlayerCoordsFrame()
+  ns.CreatePlayerCoordsFrame()
 end
 
 function ns.showMouseCoordsFrame()
   ns.Addon.db.profile.displayCoords.showMouseCoords = true
-  CreateMouseCoordsFrame()
+  ns.CreateMouseCoordsFrame()
 end
 
 function ns.ApplySavedCoords()
@@ -457,7 +341,7 @@ function ns.ApplySavedCoords()
 
   if db.displayCoords.showPlayerCoords and player then
     if PlayerCoordsFrame then PlayerCoordsFrame:Hide() end
-    CreatePlayerCoordsFrame()
+    ns.CreatePlayerCoordsFrame()
     local anchor = _G[player.relativeTo] or UIParent
     PlayerCoordsFrame:SetScale(player.scale or 1.0)
     PlayerCoordsFrame:ClearAllPoints()
@@ -469,7 +353,7 @@ function ns.ApplySavedCoords()
 
   if db.displayCoords.showMouseCoords and mouse then
     ns.HideMouseCoordsFrame()
-    CreateMouseCoordsFrame()
+    ns.CreateMouseCoordsFrame()
     if MouseCoordsFrame then
       MouseCoordsFrame:Show()
     end
@@ -478,23 +362,7 @@ function ns.ApplySavedCoords()
   end
 
   ns.ApplySavedAlpha()
-
-  if ns.AreaMapMouseCoordsFrame then
-    ns.AreaMapMouseCoordsFrame:Hide()
-    ns.AreaMapMouseCoordsFrame:SetScript("OnUpdate", nil)
-    ns.AreaMapMouseCoordsFrame:SetParent(nil)
-    ns.AreaMapMouseCoordsFrame = nil
-  end
-
-  if db.areaMap.showAreaMapDropDownMenu and db.areaMap.showAreaMapCoords then
-    ns.CreateAreaMapMouseCoordsFrame()
-    if ns.AreaMapMouseCoordsFrame and BattlefieldMapFrame and BattlefieldMapFrame:IsShown() then
-      ns.AreaMapMouseCoordsFrame:Show()
-      ns.EnableAreaMapUpdate()
-    end
-  end
 end
-
 
 function ns.ApplySavedAlpha()
   local pAlpha = ns.Addon.db.profile.displayCoords.PlayerCoordsAlpha or 1

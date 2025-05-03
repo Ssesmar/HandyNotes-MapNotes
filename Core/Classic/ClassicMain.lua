@@ -30,24 +30,25 @@ function ns.pluginHandler:OnEnter(uiMapId, coord)
   local nodeData = nil
   local GetCurrentMapID = WorldMapFrame:GetMapID()
 
-  -- Highlight 
   if not self.highlight then
     self.highlight = self:CreateTexture(nil, "OVERLAY")
     self.highlight:SetBlendMode("ADD")
     self.highlight:SetAlpha(1)
     self.highlight:SetAllPoints()
   end
-  self.highlight:SetTexture(self.texture:GetTexture())
-  self.highlight:Show()
 
-  -- highlight icon level
-  if self.highlight and self.highlight.SetDrawLayer then
-    self.highlight:SetDrawLayer("OVERLAY", 6)  -- Highlight-Icon unterhalb des TomTom-Wegpunkts
+  if self.highlight:GetTexture() ~= self.texture:GetTexture() then
+    self.highlight:SetTexture(self.texture:GetTexture())
   end
 
-  -- icon level himself
+  self.highlight:Show()
+
+  if self.highlight and self.highlight.SetDrawLayer then
+    self.highlight:SetDrawLayer("OVERLAY", 6)
+  end
+
   if self.texture and self.texture.SetDrawLayer then
-    self.texture:SetDrawLayer("OVERLAY", 5)  -- Normales Icon unter dem Highlight
+    self.texture:SetDrawLayer("OVERLAY", 5)
   end
 
   if (minimap[uiMapId] and minimap[uiMapId][coord]) then
@@ -818,6 +819,10 @@ function Addon:OnProfileChanged(event, database, profileKeys)
   ns.ApplySavedCoords()
   ns.ReloadAreaMapSettings()
 
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
+
   HandyNotes:GetModule("FogOfWarButton"):Refresh()
   if ns.Addon.db.profile.CoreChatMassage then
     print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " ..
@@ -836,9 +841,12 @@ function Addon:OnProfileReset(event, database, profileKeys)
   ns.DefaultMouseCoords()
   ns.DefaultPlayerAlpha()
   ns.DefaultMouseAlpha()
-  ns.HidePlayerCoordsFrame()
-  ns.HideMouseCoordsFrame()
   ns.UpdateAreaMapFogOfWar()
+  ns.ResetAreaMapToPlayerLocation()
+
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
 
   wipe(ns.dbChar.CapitalsDeletedIcons)
   wipe(ns.dbChar.MinimapCapitalsDeletedIcons)
@@ -865,6 +873,10 @@ function Addon:OnProfileCopied(event, database, profileKeys)
 
   ns.ApplySavedCoords()
   ns.ReloadAreaMapSettings()
+
+  if ns.SetAreaMapMenuVisibility then
+    ns.SetAreaMapMenuVisibility(ns.Addon.db.profile.areaMap.showAreaMapDropDownMenu)
+  end
 
   HandyNotes:GetModule("FogOfWarButton"):Refresh()
   if ns.Addon.db.profile.CoreChatMassage then

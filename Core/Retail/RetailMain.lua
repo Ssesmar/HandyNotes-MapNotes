@@ -60,6 +60,20 @@ function ns.MiniMapPlayerArrow()
     MMPA.texture:SetSnapToPixelGrid(false)
     MMPA.elapsed = 0
 
+    MMPA:SetScript("OnEnter", function(self)
+      if ns.Addon.db.profile.activate.MinimapArrowOnEnter and ns.Addon.db.profile.activate.MinimapArrow then
+        self:Hide()
+      end
+    end)
+
+    MMPA:SetScript("OnLeave", function(self)
+      if ns.Addon.db.profile.activate.MinimapArrowOnEnter and ns.Addon.db.profile.activate.MinimapArrow  then
+        C_Timer.After(ns.Addon.db.profile.activate.MinimapArrowOnEnterTime, function()
+          self:Show()
+        end)
+      end
+    end)
+
     MMPA:SetScript("OnUpdate", function(self, elapsed)
       self.elapsed = self.elapsed + elapsed
       if self.elapsed < 0.05 then return end
@@ -157,7 +171,6 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
 
   local nodeData = nil
   local GetCurrentMapID = WorldMapFrame:GetMapID()
-
   -- Highlight 
   if not self.highlight then
     self.highlight = self:CreateTexture(nil, "OVERLAY")
@@ -191,7 +204,7 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
 	end
 
 	if (not nodeData) then return end
-	
+
 	local tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip
 
 	if ( self:GetCenter() > UIParent:GetCenter() ) then -- compare X coordinate
@@ -320,6 +333,7 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
     end
 
     local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
+
     if nodeData.questID then
 
       if IsQuestFlaggedCompleted(nodeData.questID) == false then
@@ -335,6 +349,11 @@ function ns.pluginHandler.OnEnter(self, uiMapId, coord)
             tooltip:AddDoubleLine(TextIconInfo:GetIconString() .. " " .. "|cff00ff00".. "< " .. L["Activate the „Link“ function from MapNotes in the General tab to create clickable links and email addresses in the chat"] .. " >" .. "\n" .. TextIconInfo:GetIconString() .. " " .. "< " .. L["Middle mouse button to post the link in the chat"] .. " >", nil, nil, false)
           end
         end
+
+      end
+
+      if IsQuestFlaggedCompleted(nodeData.questID) == true and nodeData.hideLink == true then
+        tooltip:AddLine("\n" .. ALREADY_LEARNED .. "\n" .. "\n", 0, 1, 0)
       end
 
       if IsQuestFlaggedCompleted(nodeData.questID) then
@@ -625,6 +644,7 @@ do
                           or value.type == "AShip" or value.type == "HShip" or value.type == "Carriage" or value.type == "TravelL" or value.type == "TravelH" or value.type == "TravelA" or value.type == "Tport2" 
                           or value.type == "OgreWaygate" or value.type == "WayGateGreen" or value.type == "Ghost" or value.type == "DarkMoon" or value.type == "Mirror" or value.type == "TravelM" or value.type == "B11M" 
                           or value.type == "MOrcF" or value.type == "UndeadF" or value.type == "GoblinF" or value.type == "GilneanF" or value.type == "KulM" or value.type == "DwarfF" or value.type == "OrcM" or value.type == "WayGateGolden"
+                          or value.type == "MoleMachineDwarf"
                           
       ns.generalIcons = value.type == "Exit" or value.type == "PassageUpL" or value.type == "PassageDownL" or value.type == "PassageRightL" or value.type == "PassageLeftL" or value.type == "Innkeeper" 
                         or value.type == "Auctioneer" or value.type == "Bank" or value.type == "MNL" or value.type == "Barber" or value.type == "Transmogger" or value.type == "ItemUpgrade" or value.type == "PvPVendor" 
@@ -844,6 +864,11 @@ do
         if value.type == "DarkMoon" then
           scale = db.MiniMapScaleDarkmoon
           alpha = db.MiniMapAlphaDarkmoon
+        end
+
+        if value.type == "MoleMachineDwarf" then
+          scale = db.MiniMapScaleRaces
+          alpha = db.MiniMapAlphaRaces
         end
 
         if value.type == "Zeppelin" or value.type == "HZeppelin" or value.type == "AZeppelin" then
@@ -1089,6 +1114,11 @@ do
         if value.type == "DarkMoon" then
           scale = db.ZoneScaleDarkmoon
           alpha = db.ZoneAlphaDarkmoon
+        end
+
+        if value.type == "MoleMachineDwarf" then
+          scale = db.ZoneScaleRaces
+          alpha = db.ZoneAlphaRaces
         end
 
         if value.type == "Zeppelin" or value.type == "HZeppelin" or value.type == "AZeppelin" then
@@ -1482,6 +1512,7 @@ local mnID3 = nodes[uiMapId][coord].mnID3
 local wwwLink = nodes[uiMapId][coord].wwwLink
 ns.achievementID = nodes[uiMapId][coord].achievementID
 ns.questID = nodes[uiMapId][coord].questID
+ns.hideLink = nodes[uiMapId][coord].hideLink
 
 local mapInfo = C_Map.GetMapInfo(uiMapId)
 local GetCurrentMapID = WorldMapFrame:GetMapID()
@@ -1586,7 +1617,7 @@ local CapitalIDs = GetCurrentMapID == 84 or GetCurrentMapID == 87  or GetCurrent
     if (button == "MiddleButton") then
       if wwwLink and not (ns.achievementID or ns.questID) then
         print(wwwLink)
-      elseif ns.questID then
+      elseif ns.questID and not ns.hideLink then
         --SendChatMessage("www.wowhead.com/quest=" .. questID, "WHISPER", "Common", GetUnitName("PLAYER"));
         print("|cffff0000Map|r|cff00ccffNotes|r", "|cffffff00" .. LOOT_JOURNAL_LEGENDARIES_SOURCE_QUEST, COMMUNITIES_INVITE_MANAGER_COLUMN_TITLE_LINK .. ":" .. "|r", "https://www.wowhead.com/quest=" .. ns.questID)
       elseif ns.achievementID then
@@ -2012,6 +2043,8 @@ function Addon:PopulateTable()
 
   ns.LoadCapitalsLocationinfo(self) -- load nodes\Retail\RetailCapitals.lua
   ns.LoadMinimapCapitalsLocationinfo(self) -- load nodes\Retail\RetailMinimapCapitals.lua
+
+  ns.LoadSpecialLocations(self)
 
 end
 

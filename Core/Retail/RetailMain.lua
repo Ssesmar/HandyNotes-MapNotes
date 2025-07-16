@@ -753,7 +753,7 @@ do
                       or GetCurrentMapID == 2151 or GetCurrentMapID == 2200 or GetCurrentMapID == 2239
           
       ns.KhazAlgar = GetCurrentMapID == 2248 or GetCurrentMapID == 2214 or GetCurrentMapID == 2215 or GetCurrentMapID == 2255 or  GetCurrentMapID == 2256 or GetCurrentMapID == 2213 
-                      or GetCurrentMapID == 2216 or GetCurrentMapID == 2369 or GetCurrentMapID == 2346
+                      or GetCurrentMapID == 2216 or GetCurrentMapID == 2369 or GetCurrentMapID == 2346 or GetCurrentMapID == 2371 or GetCurrentMapID == 2472
 
       ns.ZoneIDs = GetCurrentMapID == 750 or GetCurrentMapID == 652 or GetCurrentMapID == 2266 or GetCurrentMapID == 2322
 
@@ -1949,42 +1949,44 @@ function Addon:PLAYER_LOGIN() -- OnInitialize()
   end
 
   function ns.RemoveBlizzPOIs()
-    if (ns.Addon.db.profile.activate.HideMapNote) then return end
+      if ns.Addon.db.profile.activate.HideMapNote then return end
 
-    for pin in WorldMapFrame:EnumeratePinsByTemplate("AreaPOIPinTemplate") do
-
-      if ns.Addon.db.profile.activate.RemoveBlizzPOIs then
-        if not ns.BlizzAreaPoisLookup then
-            ns.BlizzAreaPoisLookup = {}
-            for _, poiID in pairs(ns.BlizzAreaPoisInfo) do
-                ns.BlizzAreaPoisLookup[poiID] = true
-            end
-        end
-
-        local areaPoiID = pin.poiInfo.areaPoiID
-        if ns.BlizzAreaPoisLookup[areaPoiID] then
-            WorldMapFrame:RemovePin(pin)
-        end
-      end
-
-      if ns.Addon.db.profile.activate.RemoveBlizzPOIsZidormi then
-          if not ns.BlizzAreaPoisLookupZidormi then
-              ns.BlizzAreaPoisLookupZidormi = {}
-              for _, poiID in pairs(ns.BlizzAreaPoisInfoZidormi) do
-                  ns.BlizzAreaPoisLookupZidormi[poiID] = true
-              end
-          end
-        
-          local areaPoiID = pin.poiInfo.areaPoiID
-          if ns.BlizzAreaPoisLookupZidormi[areaPoiID] then
-              ns.poi = C_AreaPoiInfo.GetAreaPOIInfo(WorldMapFrame:GetMapID(), areaPoiID)
-              if ns.poi ~= nil and ns.poi.areaPoiID == areaPoiID then
-                  WorldMapFrame:RemovePin(pin)
-              end
+      if ns.Addon.db.profile.activate.RemoveBlizzPOIs and not ns.BlizzAreaPoisLookup then
+          ns.BlizzAreaPoisLookup = {}
+          for _, poiID in pairs(ns.BlizzAreaPoisInfo) do
+              ns.BlizzAreaPoisLookup[poiID] = true
           end
       end
 
-    end
+      if ns.Addon.db.profile.activate.RemoveBlizzPOIsZidormi and not ns.BlizzAreaPoisLookupZidormi then
+          ns.BlizzAreaPoisLookupZidormi = {}
+          for _, poiID in pairs(ns.BlizzAreaPoisInfoZidormi) do
+              ns.BlizzAreaPoisLookupZidormi[poiID] = true
+          end
+      end
+
+      for pinTemplate, pinPool in pairs(WorldMapFrame.pinPools) do
+          for pin in pinPool:EnumerateActive() do
+              local areaPoiID = pin.areaPoiID or (pin.poiInfo and pin.poiInfo.areaPoiID)
+
+              if ns.Addon.db.profile.activate.RemoveBlizzPOIs and areaPoiID and ns.BlizzAreaPoisLookup[areaPoiID] then
+                  pin:Hide()
+              end
+
+              if ns.Addon.db.profile.activate.RemoveBlizzPOIsZidormi and areaPoiID and ns.BlizzAreaPoisLookupZidormi[areaPoiID] then
+                  pin:Hide()
+              end
+
+              if ns.Addon.db.profile.activate.RemoveBlizzPOIsZidormi and pin.objectGUID then
+                  for _, id in ipairs(ns.BlizzAreaPoisInfoZidormi) do
+                      if string.find(pin.objectGUID, tostring(id)) then
+                          pin:Hide()
+                          break
+                      end
+                  end
+              end
+          end
+      end
 
   end
 

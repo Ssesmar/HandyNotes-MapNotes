@@ -2,14 +2,27 @@
 ## https://legacy.curseforge.com/wow/addons/mapnotes/files
 
 Changelog:
-• A new icon category called "Races" has been added to all tabs
-• For capital cities/zones/minimaps, this is located in the "Transport" submenu
-• For Azeroth/Continent maps, this is located directly there
-• This category currently only contains the mole machine icons for the Dark Iron race
-• It can be displayed or hidden separately on each map
-• Only the icons belonging to the corresponding race are displayed (Thus, the mole machine positions are only displayed for Dark Iron dwarves)
-• Once you have reached one of these locations and learned it through interaction, this icon disappears from all maps, and only the undiscovered and learned ones are displayed
-• You can also display previously discovered and learned icons again under the "General" tab under "Advanced Options" under the "Race +" option
+
+    • A changelog window has been added that displays the most important changes.
+      It will reappear at every login unless the option
+      “Do not show again until next version” at the bottom left is selected.
+
+    • A new subtab in the General menu named “Information” was added,
+      allowing you to reopen the changelog window.
+
+    • The general Shift function in the “General” tab under “Additional Options” was removed.
+
+    • New features called “Waypoint Shift” were added under “Advanced Options”.
+      This allows waypoints to be created with or without pressing the Shift key.
+
+    • New features called “Mouse Key Mapping” were added under “Advanced Options”.
+      This allows you to change the mouse interaction with MapNotes icons,
+      including swapping the left and right mouse button functions.
+
+    • A new subtab named “Minimap +” was added.
+      The function for displaying the minimap player arrow above addon icons
+      was moved here (previously under “Symbol Options”).
+
     
 If you like this addon, please feel free to support me via Paypal ,Patreon or Ko-fi, any support is welcome
 

@@ -172,6 +172,7 @@ ns.defaults = {
       WayPoints = true,
       WayPointsShift = true,
       KilledBosses = true,
+      NpcNameTargeting = true,
       BossNames = true,
       graySingleID = true,
       grayMultipleID = true,
@@ -179,7 +180,9 @@ ns.defaults = {
       MmbWmbChatMessage = true,
       ChatMassage = false,
       ZoneChanged = false,
-      ZoneChangedDetail = false,
+      ZoneChangedDetail = true,
+      MapChanging = false,
+      NpcNameTargetingChatText = true,
       TooltipInformations = true,
       DeleteIcons = false,
       CreateAndCopyLinks = false,
@@ -510,6 +513,7 @@ ns.defaults = {
       showCapitalsGhost = true,
       showCapitalsStablemaster = true,
       showCapitalsTradingPost = true,
+      showCapitalsMountMerchent = true,
 
     --7 Capitals Minimap
       showMinimapCapitals = true,
@@ -596,7 +600,8 @@ ns.defaults = {
       showMinimapCapitalsGhost = true,
       showMinimapCapitalsStablemaster = true,
       showMinimapCapitalsTradingPost = true,
-
+      showMinimapCapitalsMountMerchent = true,
+      
     --10 ns.Addon.db.profile.activate.
       activate = {
         HideMapNote = false,
@@ -605,7 +610,7 @@ ns.defaults = {
         SwapButtons = false,
         showRacesIconsDiscovered = false,
         MinimapArrow = true,
-        MinimapArrowOnEnter = false,
+        MinimapArrowOnEnter = true,
         MinimapArrowOnEnterTime = 3,
         ClassicIcons = false,
         ClassicPortals = true,
@@ -668,6 +673,8 @@ ns.defaults = {
         MinimapCapitalsTransporting = true,
         MinimapCapitalsProfessions = true,
         MinimapCapitalsGeneral = true,
+
+        DeveloperMode = false,
       },
 
     --11 deleted icons function

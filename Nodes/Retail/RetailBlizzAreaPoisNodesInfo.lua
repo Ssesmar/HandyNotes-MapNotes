@@ -12,14 +12,17 @@ ns.BlizzAreaPoisInfo = {
     39, -- Ratchet
     1961, -- Shattrath
     2071, -- Area 52
+    2298, -- Wyrmresttempel
     2317, -- Dalaran City
     2837, -- Tonlongstepps PvE Vendor
     5056, -- The Dark Portal Blasted Lands
     5881, -- The Cape of Stranglethorn, Boat to Ratschet
     5882, -- Northern Barrens, Boat to Booty Bay
+    7489, -- Loamm Dragonflight Zaralekcave
+    --7898, -- Dornogal: Earthen capital and fortress protecting the Coreway
+    7919, -- Dornogal: Foundation Hall Portal Room
     7945, -- Ship Icon Gilneas to Bel Ameth
     7944, -- Ship Icon Bel Ameth to Gilneas
-
     7959, -- Portal to Dalaran from Dustwallow - TWW Pre Event
     7960, -- Portal to Dalaran from Dragonblight - TWW Pre Event
     7961, -- Portal to Dalaran from Searing Gorge - TWW Pre Event
@@ -33,6 +36,7 @@ ns.BlizzAreaPoisInfo = {
     8250, -- Mole Machine from Siren Isle to Deeps
     8230, -- Portal from Dornogal to Undermine
     8231, -- Portal from Undermine to Dornogal
+    8414, -- Portal from K'arsh to Dornogal
 
     -- City Alliance
     8, -- Ironforge Icon
@@ -75,6 +79,7 @@ ns.BlizzAreaPoisInfo = {
     6138, -- Mechagon Zuldazar Travel
     7341, -- Zeppelin Durotar
     7339, -- Ship Icon The Waking Shores to OG
+    4587, -- Warspear PvP Vendors
 }
 
 ns.BlizzAreaPoisInfoZidormi = {

@@ -71,9 +71,9 @@ function ns.CreatePlayerCoordsFrame()
 
   playerFrame:SetScript("OnEnter", function(self)
     GameTooltip:SetOwner(self, "ANCHOR_TOP")
-    GameTooltip:AddLine(ns.COLORED_ADDON_NAME .. " " .. L["Player coordinates"], 1, 1, 1, true)
     if not ns.Addon.db.profile.activate.HideMapNote then
       if ns.Addon.db.profile.TooltipInformations then
+        GameTooltip:AddLine(ns.COLORED_ADDON_NAME .. " " .. L["Player coordinates"], 1, 1, 1, true)
         GameTooltip:AddLine(TextIconInfo:GetIconString() .. "|cff00ff00< " .. L["Hold down Shift + Left mouse button to move"] .. " >", 1, 1, 1)
       end
     end
@@ -179,9 +179,9 @@ function ns.CreateMouseCoordsFrame()
 
   mouseFrame:SetScript("OnEnter", function(self)
     GameTooltip:SetOwner(self, "ANCHOR_TOP")
-    GameTooltip:AddLine(ns.COLORED_ADDON_NAME .. " " .. L["Mouse coordinates"], 1, 1, 1, true)
     if not ns.Addon.db.profile.activate.HideMapNote then
       if ns.Addon.db.profile.TooltipInformations then
+        GameTooltip:AddLine(ns.COLORED_ADDON_NAME .. " " .. L["Mouse coordinates"], 1, 1, 1, true)        
         GameTooltip:AddLine(TextIconInfo:GetIconString() .. "|cff00ff00< " .. L["Hold down Shift + Left mouse button to move"] .. " >", 1, 1, 1)
       end
     end

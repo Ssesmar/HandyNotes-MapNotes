@@ -21,118 +21,106 @@ ns.RestoreStaticPopUpsRetail() -- StaticPopUps.lua
 if ns.ErrorMessages then ns.ErrorMessages() end -- RetailErrorMessage.lua
 
 function ns.deleteCharacterSavedVariables() -- delete only activ profile
-    local db = ns.Addon and ns.Addon.db
-    if not db then return end
+  local db = ns.Addon and ns.Addon.db
+  if not db then return end
 
-    local current = db:GetCurrentProfile()
+  db:SetProfile("Default")
 
-    db:SetProfile("Default")
+  local current = db:GetCurrentProfile()
+  if current and current ~= "Default" then
+    db:DeleteProfile(current, true)
+  else
+    db:ResetProfile()
+  end
 
-    if current and current ~= "Default" then
-        db:DeleteProfile(current, true)
-    else
-        db:ResetProfile()
+  if HandyNotes_MapNotesRetailDB and HandyNotes_MapNotesRetailDB.char then
+    HandyNotes_MapNotesRetailDB.char[current] = nil
+  end
+
+  local mmButton = _G["MNMiniMapButtonRetailDB"]
+  if type(mmButton) == "table" then
+    if mmButton.profileKeys then
+      mmButton.profileKeys[current] = nil
     end
-
-    if HandyNotes_MapNotesRetailDB
-    and HandyNotes_MapNotesRetailDB.char then
-        HandyNotes_MapNotesRetailDB.char[current] = nil
+    if mmButton.profiles then
+      mmButton.profiles[current] = nil
     end
-
-    local mm = _G["MNMiniMapButtonRetailDB"]
-    if type(mm) == "table" then
-        if mm.profileKeys then
-            mm.profileKeys[current] = nil
-        end
-        if mm.profiles then
-            mm.profiles[current] = nil
-        end
-    end
+  end
 end
 
 function ns.keepOnlyCurrentSavedVariables() -- keep activ profile, delete all others
-    local db = ns.Addon and ns.Addon.db
-    if not db then return end
+  local db = ns.Addon and ns.Addon.db
+  if not db then return end
 
-    local currentProfile = db:GetCurrentProfile()
-    if not currentProfile then return end
+  local currentProfile = db:GetCurrentProfile()
+  if not currentProfile then return end
 
-    local charKey = UnitName("player") .. " - " .. GetRealmName()
-    if db.keys and db.keys.profileKeys then
-        for key in pairs(db.keys.profileKeys) do
-            if key ~= charKey then
-                db.keys.profileKeys[key] = nil
-            end
+  local charKey = UnitName("player") .. " - " .. GetRealmName()
+  if db.keys and db.keys.profileKeys then
+    for key in pairs(db.keys.profileKeys) do
+      if key ~= charKey then
+        db.keys.profileKeys[key] = nil
+      end
+    end
+    db.keys.profileKeys[charKey] = currentProfile
+  end
+
+  for profileName in pairs(db.profiles) do
+    if profileName ~= currentProfile then
+      db:DeleteProfile(profileName, true)
+    end
+  end
+
+  local wipeTables = { "FogOfWarColorDB", "HandyNotes_MapNotesRetailChangelogDB" }
+  for _, svName in ipairs(wipeTables) do
+    if type(_G[svName]) == "table" then
+      wipe(_G[svName])
+    end
+  end
+
+  local mmButton = _G["MNMiniMapButtonRetailDB"]
+  if type(mmButton) == "table" then
+
+    if mmButton.profileKeys then
+      for key in pairs(mmButton.profileKeys) do
+        if key ~= charKey then
+          mmButton.profileKeys[key] = nil
         end
-        db.keys.profileKeys[charKey] = currentProfile
+      end
+      mmButton.profileKeys[charKey] = currentProfile
     end
 
-    for profileName in pairs(db.profiles) do
-        if profileName ~= currentProfile then
-            db:DeleteProfile(profileName, true)
+    if mmButton.profiles then
+      for key in pairs(mmButton.profiles) do
+        if key ~= currentProfile then
+          mmButton.profiles[key] = nil
         end
+      end
     end
-
-    local wipeTables = {
-        "FogOfWarColorDB",
-        "HandyNotes_MapNotesRetailChangelogDB",
-    }
-
-    for _, svName in ipairs(wipeTables) do
-        if type(_G[svName]) == "table" then
-            wipe(_G[svName])
-        end
-    end
-
-    local mm = _G["MNMiniMapButtonRetailDB"]
-    if type(mm) == "table" then
-
-        if mm.profileKeys then
-            for key in pairs(mm.profileKeys) do
-                if key ~= charKey then
-                    mm.profileKeys[key] = nil
-                end
-            end
-            mm.profileKeys[charKey] = currentProfile
-        end
-
-        if mm.profiles then
-            for key in pairs(mm.profiles) do
-                if key ~= currentProfile then
-                    mm.profiles[key] = nil
-                end
-            end
-        end
-    end
+  end
 end
 
 function ns.deleteALLSavedVariables() -- delete all profiles
-    local db = ns.Addon and ns.Addon.db
-    if not db then return end
+  local db = ns.Addon and ns.Addon.db
+  if not db then return end
 
-    db:SetProfile("Default")
+  db:SetProfile("Default")
 
-    for profileName in pairs(db.profiles) do
-        if profileName ~= "Default" then
-            db:DeleteProfile(profileName, true)
-        end
+  for profileName in pairs(db.profiles) do
+    if profileName ~= "Default" then
+      db:DeleteProfile(profileName, true)
     end
+  end
 
-    db:ResetDB("Default")
+  db:ResetDB("Default")
 
-    local wipeTables = {
-        "HandyNotes_MapNotesRetailNpcCacheDB",
-        "FogOfWarColorDB",
-        "HandyNotes_MapNotesRetailChangelogDB",
-        "MNMiniMapButtonRetailDB",
-    }
-
-    for _, svName in ipairs(wipeTables) do
-        if type(_G[svName]) == "table" then
-            wipe(_G[svName])
-        end
-        _G[svName] = nil
+  local wipeTables = { "HandyNotes_MapNotesRetailNpcCacheDB", "FogOfWarColorDB", "HandyNotes_MapNotesRetailChangelogDB", "MNMiniMapButtonRetailDB" }
+  for _, svName in ipairs(wipeTables) do
+    if type(_G[svName]) == "table" then
+      wipe(_G[svName])
     end
+    _G[svName] = nil
+  end
 end
 
 function MapNotesMiniButton:OnInitialize() --mmb.lua

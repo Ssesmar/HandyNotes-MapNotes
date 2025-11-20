@@ -10,6 +10,10 @@ local function mapName(id)
     return name or ""
 end
 
+------------------------------------ Housing Zones
+ns.Razorwind = mapName(2351) -- Horde
+ns.FoundersPoint = mapName(2352) -- Alliance
+
 ------------------------------------ Kalimdor Zones
 ns.Durotar = mapName(1)
 ns.Barrens = mapName(10)
@@ -118,13 +122,13 @@ ns.EmeraldDream = mapName(2200)
 ns.Amirdrassil = mapName(2239)
 ------------------------------------ Khaz Algar Zones
 ns.CityOfThreads = mapName(2213)
+ns.HallofAwakening = mapName(2322)
 ns.Dornogal = mapName(2339)
 ns.SirenIsle = mapName(2369)
 ns.Tazavesh = mapName(2472)
 ------------------------------------ Housing
 ns.RazorwindShores = mapName(2351)
 ns.FoundersPoint = mapName(2352)
-
 ------------------------------------ continents
 ns.Kalimdor = mapName(12)
 ns.EasternKingdom = mapName(13)
@@ -314,6 +318,7 @@ ns.Dreamwalk = spellName(193753) -- Teleport Dreamwalk - Druid
 ns.DeathGate = spellName(50977) -- Teleport Death Gate -- DK
 ns.ZenPilgrimage = spellName(126892) -- Teleport Zen Pilgrimage -- Monk
 ns.JumpToSkyhold = spellName(192085) -- Teleport -- Warrior Class Hall
+ns.WarbandExploreAllMapsFromMainchar = spellName(431280) -- Warband explore all maps
 
 
 ------------------------------------ CurrencyID Text

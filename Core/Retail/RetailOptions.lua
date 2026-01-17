@@ -1727,17 +1727,17 @@ ns.options = {
                     if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showCapitalsDarkmoon then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Capitals"], CALENDAR_FILTER_DARKMOON, L["icons"], "|cff00ff00" .. L["are shown"]) else 
                     if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showCapitalsDarkmoon then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Capitals"], CALENDAR_FILTER_DARKMOON, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
                   },
-                --showCapitalsHousing = {
-                --  disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.Capitals end,
-                --  type = "toggle",
-                --  name = TextIconHousing:GetIconString() .. " " .. BINDING_HEADER_HOUSING_SYSTEM,
-                --  desc = FACTION_HORDE .. ":\n" .. ns.RazorwindShores .. "\n\n" .. FACTION_ALLIANCE .. ":\n" .. ns.FoundersPoint,
-                --  width = 0.80,                  
-                --  order = 14.8,
-                --  set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
-                --    if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cff00ff00" .. L["are shown"]) else 
-                --    if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
-                --  }, 
+                showCapitalsHousing = {
+                  disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.Capitals end,
+                  type = "toggle",
+                  name = TextIconHousing:GetIconString() .. " " .. BINDING_HEADER_HOUSING_SYSTEM,
+                  desc = FACTION_HORDE .. ":\n" .. ns.RazorwindShores .. "\n\n" .. FACTION_ALLIANCE .. ":\n" .. ns.FoundersPoint,
+                  width = 0.80,                  
+                  order = 14.8,
+                  set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
+                    if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cff00ff00" .. L["are shown"]) else 
+                    if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
+                  }, 
                 },
               },
             CapitalsInstanceTab = {
@@ -3037,17 +3037,17 @@ ns.options = {
                         if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showMinimapCapitalsDarkmoon then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. MINIMAP_LABEL .. " " .. L["Capitals"], CALENDAR_FILTER_DARKMOON, L["icons"], "|cff00ff00" .. L["are shown"]) else 
                         if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showMinimapCapitalsDarkmoon then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. MINIMAP_LABEL .. " " .. L["Capitals"], CALENDAR_FILTER_DARKMOON, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
                   },
-                --showMinimapCapitalsHousing = {
-                --  disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.MinimapCapitals or ns.Addon.db.profile.activate.SyncCapitalsAndMinimap end,
-                --  type = "toggle",
-                --  name = TextIconHousing:GetIconString() .. " " .. BINDING_HEADER_HOUSING_SYSTEM,
-                --  desc = FACTION_HORDE .. ":\n" .. ns.RazorwindShores .. "\n\n" .. FACTION_ALLIANCE .. ":\n" .. ns.FoundersPoint,
-                --  width = 0.80,                  
-                --  order = 83.8,
-                --  set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
-                --        if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showMinimapCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. MINIMAP_LABEL .. " " .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cff00ff00" .. L["are shown"]) else 
-                --        if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showMinimapCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. MINIMAP_LABEL .. " " .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
-                --  }, 
+                showMinimapCapitalsHousing = {
+                  disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.MinimapCapitals or ns.Addon.db.profile.activate.SyncCapitalsAndMinimap end,
+                  type = "toggle",
+                  name = TextIconHousing:GetIconString() .. " " .. BINDING_HEADER_HOUSING_SYSTEM,
+                  desc = FACTION_HORDE .. ":\n" .. ns.RazorwindShores .. "\n\n" .. FACTION_ALLIANCE .. ":\n" .. ns.FoundersPoint,
+                  width = 0.80,                  
+                  order = 83.8,
+                  set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
+                        if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showMinimapCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. MINIMAP_LABEL .. " " .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cff00ff00" .. L["are shown"]) else 
+                        if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showMinimapCapitalsHousing then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. MINIMAP_LABEL .. " " .. L["Capitals"], BINDING_HEADER_HOUSING_SYSTEM, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
+                  }, 
                 },
               },
             InstanceMinimapTab = {

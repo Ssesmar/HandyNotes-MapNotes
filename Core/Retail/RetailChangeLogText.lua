@@ -1,11 +1,14 @@
 local ADDON_NAME, ns = ...
 
-ns.CurrentAddonVersion = "3.2.1"
-ns.PreviousAddonVersion_1 = "3.2.0"
+ns.CurrentAddonVersion = "3.2.4"
+ns.PreviousAddonVersion = "3.2.2" -- Only increase this number if you want to see changelogs and NPC updates after an add-on update. Only important for actual changes to NPCs or major updates
 
 ns.LOCALE_CHANGELOGS = {
+  { version = "3.2.4", table = "prepatchUpdate" },
+  { version = "3.2.3", table = "smallChanges" },
+  { version = "3.2.2", table = ns.LOCALE_CHANGELOG_3_2_2 },
   { version = "3.2.1", table = ns.LOCALE_CHANGELOG_3_2_1 },
-  { version = "3.2.0", table = ns.LOCALE_CHANGELOG_3_2_0 },
+  { version = "3.2.0", table = { "smallChanges", "tocUpdate" } },
   { version = "3.1.9", table = ns.LOCALE_CHANGELOG_3_1_9 },
   { version = "3.1.8", table = ns.LOCALE_CHANGELOG_3_1_8 },
   { version = "3.1.7", table = ns.LOCALE_CHANGELOG_3_1_7 },
@@ -60,6 +63,74 @@ ns.LOCALE_CHANGELOG_3_2_ = { -- empty backup file
 
   koKR = [[
 
+]],
+}
+
+ns.LOCALE_CHANGELOG_3_2_2 = {
+  deDE = [[
+• Zuerst wünsche euch allen ein gutes neues Jahr mit viel Glück und Gesundheit.
+
+• Die Option zum Ausblenden der MapNotes-Icons auf der Housingmap wurde unter „Hauptstadt“ und „Hauptstadt-Minimap“ hinzugefügt.
+]],
+
+  enUS = [[
+• First of all, I wish you all a happy new year with lots of luck and good health.
+
+• The option to hide MapNotes icons on the housing map has been added under "Capital City" and "Capital City Minimap".
+]],
+
+  frFR = [[
+• Tout d’abord, je vous souhaite à tous une bonne année, avec beaucoup de chance et de santé.
+
+• L’option permettant de masquer les icônes MapNotes sur la carte de logement a été ajoutée sous « Capitale » et « Mini-carte de la capitale ».
+]],
+
+  itIT = [[
+• Innanzitutto auguro a tutti voi un felice anno nuovo, con tanta fortuna e buona salute.
+
+• L’opzione per nascondere le icone MapNotes sulla mappa degli alloggi è stata aggiunta sotto "Capitale" e "Minimappa della capitale".
+]],
+
+  esES = [[
+• En primer lugar, os deseo a todos un feliz año nuevo con mucha suerte y salud.
+
+• La opción para ocultar los iconos de MapNotes en el mapa de viviendas se ha añadido en "Capital" y "Minimapa de la capital".
+]],
+
+  esMX = [[
+• Antes que nada, les deseo a todos un feliz año nuevo con mucha suerte y salud.
+
+• La opción para ocultar los iconos de MapNotes en el mapa de viviendas se agregó en "Capital" y "Minimapa de la capital".
+]],
+
+  ptBR = [[
+• Antes de tudo, desejo a todos um feliz ano novo, com muita sorte e saúde.
+
+• A opção para ocultar os ícones do MapNotes no mapa de habitação foi adicionada em "Capital" e "Minimapa da capital".
+]],
+
+  ruRU = [[
+• Прежде всего, желаю всем счастливого Нового года, удачи и крепкого здоровья.
+
+• Параметр скрытия значков MapNotes на карте жилья был добавлен в разделы «Столица» и «Мини-карта столицы».
+]],
+
+  zhCN = [[
+• 首先，祝大家新年快乐，幸福安康。
+
+• 已在“主城”和“主城小地图”中添加了在住宅地图上隐藏 MapNotes 图标的选项。
+]],
+
+  zhTW = [[
+• 首先，祝大家新年快樂，健康平安。
+
+• 已在「主城」與「主城小地圖」中新增在住宅地圖上隱藏 MapNotes 圖示的選項。
+]],
+
+  koKR = [[
+• 먼저, 모두에게 행운과 건강이 가득한 새해를 기원합니다.
+
+• 하우징 지도에서 MapNotes 아이콘을 숨기는 옵션이 "수도" 및 "수도 미니맵"에 추가되었습니다.
 ]],
 }
 
@@ -1656,5 +1727,189 @@ ns.LOCALE_CHANGELOG_3_1_1 = {
   • 각 캐릭터의 원래 블리자드 미니맵 아이콘 설정을 저장하여, 옵션 해제 시 원상복구 가능
 
   • 변경 사항은 즉시 적용되지만, 블리자드 미니맵 하위 메뉴에서는 재시작(/reload) 전까지 잘못 표시될 수 있음
+]],
+}
+
+ns.prepatchUpdate = {
+  deDE = [[
+• Vorbereitung für zukünftiges Update
+]],
+
+  enUS = [[
+• Preparation for a future update
+]],
+
+  frFR = [[
+• Préparation pour une mise à jour future
+]],
+
+  itIT = [[
+• Preparazione per un aggiornamento futuro
+]],
+
+  esES = [[
+• Preparación para una actualización futura
+]],
+
+  esMX = [[
+• Preparación para una actualización futura
+]],
+
+  ptBR = [[
+• Preparação para uma atualização futura
+]],
+
+  ruRU = [[
+• Подготовка к будущему обновлению
+]],
+
+  zhCN = [[
+• 为未来更新做准备
+]],
+
+  zhTW = [[
+• 為未來更新做準備
+]],
+
+  koKR = [[
+• 향후 업데이트 준비
+]],
+}
+
+ns.classicUpdate = {
+  deDE = [[
+• Update Classic
+]],
+
+  enUS = [[
+• Classic update
+]],
+
+  frFR = [[
+• Mise à jour Classic
+]],
+
+  itIT = [[
+• Aggiornamento Classic
+]],
+
+  esES = [[
+• Actualización de Classic
+]],
+
+  esMX = [[
+• Actualización de Classic
+]],
+
+  ptBR = [[
+• Atualização do Classic
+]],
+
+  ruRU = [[
+• Обновление Classic
+]],
+
+  zhCN = [[
+• Classic 更新
+]],
+
+  zhTW = [[
+• Classic 更新
+]],
+
+  koKR = [[
+• Classic 업데이트
+]],
+}
+
+ns.smallChanges = {
+  deDE = [[
+• kleinere Anpassungen
+]],
+
+  enUS = [[
+• minor adjustments
+]],
+
+  frFR = [[
+• ajustements mineurs
+]],
+
+  itIT = [[
+• piccoli aggiustamenti
+]],
+
+  esES = [[
+• ajustes menores
+]],
+
+  esMX = [[
+• ajustes menores
+]],
+
+  ptBR = [[
+• pequenos ajustes
+]],
+
+  ruRU = [[
+• небольшие изменения
+]],
+
+  zhCN = [[
+• 小幅调整
+]],
+
+  zhTW = [[
+• 小幅調整
+]],
+
+  koKR = [[
+• 소소한 조정
+]],
+}
+
+ns.tocUpdate = {
+  deDE = [[
+• toc update
+]],
+
+  enUS = [[
+• TOC update
+]],
+
+  frFR = [[
+• Mise à jour du TOC
+]],
+
+  itIT = [[
+• Aggiornamento del TOC
+]],
+
+  esES = [[
+• Actualización del TOC
+]],
+
+  esMX = [[
+• Actualización del TOC
+]],
+
+  ptBR = [[
+• Atualização do TOC
+]],
+
+  ruRU = [[
+• Обновление TOC
+]],
+
+  zhCN = [[
+• TOC 更新
+]],
+
+  zhTW = [[
+• TOC 更新
+]],
+
+  koKR = [[
+• TOC 업데이트
 ]],
 }

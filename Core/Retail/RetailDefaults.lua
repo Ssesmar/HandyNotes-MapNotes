@@ -223,6 +223,7 @@ ns.defaults = {
       showMiniMapShadowlands = true,
       showMiniMapDragonIsles = true,
       showMiniMapKhazAlgar = true,
+      showMiniMapQuelThalas = true,
     -- MiniMap Instance
       showMiniMapRaids = true,
       showMiniMapDungeons = true,
@@ -298,6 +299,7 @@ ns.defaults = {
       showZoneShadowlands = true,
       showZoneDragonIsles = true,
       showZoneKhazAlgar = true,
+      showZoneQuelThalas = true,
     -- Zone Instance
       showZoneRaids = true,
       showZoneDungeons = true,
@@ -391,6 +393,7 @@ ns.defaults = {
       showContinentShadowlands = true,
       showContinentDragonIsles = true,
       showContinentKhazAlgar = true,
+      showContinentQuelThalas = true,
 
       --4 Azeroth map tab
       azerothScale = 1.5,
@@ -468,6 +471,7 @@ ns.defaults = {
       showCapitalsDornogal = true,
       showCapitalsDarkmoon = true,
       showCapitalsRaces = true,
+      showCapitalsSilvermoonMN = true,
 
     --Capital Instances
       CapitalsInstanceScale = 2,
@@ -574,6 +578,7 @@ ns.defaults = {
       showMinimapCapitalsDornogal = true,
       showMinimapCapitalsDarkmoon = true,
       showMinimapCapitalsRaces = true,
+      showMinimapCapitalsSilvermoonMN = true,
 
     --Capital Minimap Instances
       MinimapCapitalsInstanceScale = 1.5,

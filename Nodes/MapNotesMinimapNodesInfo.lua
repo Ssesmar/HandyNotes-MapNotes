@@ -844,4 +844,20 @@ minimap[2423] = { } -- Sidestreet Sluice - Inside Dungeon Map
 minimap[2420] = { } -- Sidestreet Sluice - The Pits - Inside Dungeon Map
 minimap[2452] = { } -- Archival Assault - Inside Dungeon Map
 minimap[2484] = { } -- Voidscar Cavern - Inside Dungeon Map
+
+--###############################
+--########### Midnight ##########
+--###############################
+
+minimap[2537] = { } -- Quel'Thalas
+minimap[2395] = { } -- Eversong Woods
+minimap[2437] = { } -- Zul'Aman
+minimap[2424] = { } -- Isle of Quel'Danas
+minimap[2405] = { } -- Leerensturm
+minimap[2413] = { } -- Harandar
+minimap[2536] = { } -- Atal'Aman
+minimap[2393] = { } -- Silvermoon
+minimap[2444] = { } -- Schlächteranhöhe
+minimap[2576] = { } -- Rootlands
+
 end

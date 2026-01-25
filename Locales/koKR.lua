@@ -366,6 +366,7 @@ L["Zandalar"] = "잔달라"
 L["Kul Tiras"] = "쿨 티라스"
 L["Shadowlands"] = "섀도우랜드"
 L["Dragon Isles"] = "드래곤 아일즈"
+L["Quel'Thalas"] = "쿠엘탈라스"
 --8 Core specific
 L["-> MiniMapButton <-"] = "-> 미니맵버튼 <-"
 L["-> WorldMapButton <-"] = "-> 월드 카드 버튼 <-"

@@ -366,6 +366,7 @@ L["Zandalar"] = true -- in process
 L["Kul Tiras"] = true -- in process
 L["Shadowlands"] = true -- in process
 L["Dragon Isles"] = true -- in process
+L["Quel'Thalas"] = true
 --8 Core specific
 L["-> MiniMapButton <-"] = true
 L["-> WorldMapButton <-"] = true

@@ -366,6 +366,7 @@ L["Zandalar"] = "赞达拉"
 L["Kul Tiras"] = "库尔提拉斯"
 L["Shadowlands"] = "暗影国度"
 L["Dragon Isles"] = "巨龙群岛"
+L["Quel'Thalas"] = "奎尔萨拉斯"
 --8 Core specific
 L["-> MiniMapButton <-"] = "-> 小地图按钮 <-"
 L["-> WorldMapButton <-"] = "-> 世界卡按钮 <-"

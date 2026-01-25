@@ -366,6 +366,7 @@ L["Zandalar"] = "Zandalar"
 L["Kul Tiras"] = "Koul Tiras"
 L["Shadowlands"] = "Terres de l'Ombre"
 L["Dragon Isles"] = "Îles du Dragon"
+L["Quel'Thalas"] = "Quel'Thalas"
 --8 Core specific
 L["-> MiniMapButton <-"] = "-> MiniMapButton <-"
 L["-> WorldMapButton <-"] = "-> Bouton de carte mondiale <-"

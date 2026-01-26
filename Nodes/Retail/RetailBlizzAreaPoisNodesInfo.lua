@@ -54,9 +54,9 @@ ns.BlizzAreaPoisInfo = {
     8231, -- Portal from Undermine to Dornogal
     8414, -- Portal from K'arsh to Dornogal
     8640, -- Portal to Voidstorm
-    8307, -- Portal to Voidstorm
-    8308, -- Portal Eversong Rootway
-    8309, -- Portal Orgrimmar
+    --8307, -- Portal to Voidstorm -- activate after finishing capital nodes
+    --8308, -- Portal Eversong Rootway -- activate after finishing capital nodes
+    --8309, -- Portal Orgrimmar -- activate after finishing capital nodes
     8478, -- Portal Eversong Rootway
     8545, -- Main Portal Chamber
     8642, -- Portal to Silvermoon and Harandar

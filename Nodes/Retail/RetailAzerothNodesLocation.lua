@@ -221,18 +221,30 @@ ns.currentSourceFile = "RetailAzerothNodesLocation.lua"
         --####################################
     
         if self.db.profile.showAzerothEasternKingdom then
-    
-    
+
+        -- Azeroth Khaz Algar Delves
+          if self.db.profile.showAzerothDelves then
+            nodes[947][94122991] = { name = DELVES_LABEL .. " " .. L["Entrance"], mnID = 2537, delveIDs = { 2502, 2503, 2505, 2535, 2547, 2525, 2506, 2528, 2510 }, type = "Delves", showInZone = true } -- Quel'Thalas
+          end
+
         -- Azeroth Eastern Kingdom Dungeons
           if self.db.profile.showAzerothDungeons then
-            nodes[947][92813801] = { id = 77, mnID = 95, type = "Dungeon", showInZone = true } -- Zul'Aman
-            nodes[947][91972614] = { id = 249, mnID = 122, type = "Dungeon", showInZone = true } -- Magisters' Terrace
+            nodes[947][92813801] = { id = 77, mnID = 95, dnID = "(" .. EXPANSION_NAME1 .. ")\n\n", type = "Dungeon", showInZone = true } -- Zul'Aman
+            nodes[947][91972614] = { id = 249, mnID = 122, dnID = "(" .. EXPANSION_NAME1 .. ")\n\n", type = "Dungeon", showInZone = true } -- Magisters' Terrace
             nodes[947][83204721] = { id = 64, mnID = 21, type = "Dungeon", showInZone = true } -- Shadowfang Keep
             nodes[947][88634402] = { id = 246, mnID = 22, type = "Dungeon", showInZone = true } -- Scholomance
             nodes[947][89593995] = { id = 236, lfgid = 40, mnID = 23, type = "Dungeon", showInZone = true } -- Stratholme
             nodes[947][86767011] = { id = 76, mnID = 50, type = "Dungeon", showInZone = true } -- Zul'Gurub
             nodes[947][79985920] = { id = 65, mnID = 203, type = "Dungeon", showInZone = true } -- Throne of Tides
             nodes[947][89945460] = { id = 71, mnID = 241, type = "Dungeon", showInZone = true } -- Grim Batol
+
+            nodes[947][89443655] = { id = 1299, mnID = 2395, dnID = "(" .. EXPANSION_NAME11 .. ")\n\n",type = "Dungeon", showInZone = true } -- Windläuferturm
+            nodes[947][95163500] = { id = 1315, mnID = 2437, dnID = "(" .. EXPANSION_NAME11 .. ")\n\n",type = "Dungeon", showInZone = true } -- Maisarakavernen
+            nodes[947][90802476] = { id = 1300, mnID = 2424, dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", type = "Dungeon", showInZone = true } -- Terrasse der Magister
+            nodes[947][93504044] = { id = 1311, mnID = 2437, dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", type = "Dungeon", showInZone = true } -- Nalorakks Bau
+            --nodes[947][96513110] = { id = 1316, mnID = 2405, type = "Dungeon", showInZone = true } -- Nexuspunkt Xenas
+            --nodes[947][96712477] = { id = 1313, mnID = 2405, type = "Dungeon", showInZone = true } -- Arena der Leerennarbe
+            --nodes[947][97572919] = { id = 1309, mnID = 2405, type = "Dungeon", showInZone = true } -- Das blendende Tal
           end
 
         -- Azeroth Eastern Kingdom PetBattleDungeons
@@ -259,8 +271,12 @@ ns.currentSourceFile = "RetailAzerothNodesLocation.lua"
         -- Azeroth Eastern Kingdom Raids
           if self.db.profile.showAzerothRaids then
             nodes[947][80455260] = { id = 75, mnID = 244, type = "Raid", showInZone = true } -- Baradin Hold
-            nodes[947][90652724] = { id = 752, mnID = 122, type = "Raid", showInZone = true } -- Sunwell Plateau
+            nodes[947][90652724] = { id = 752, mnID = 122, dnID = "(" .. EXPANSION_NAME1 .. ")\n\n", type = "Raid", showInZone = true } -- Sunwell Plateau
             nodes[947][90655621] = { id = 72, mnID = 241, type = "Raid", showInZone = true } -- The Bastion of Twilight
+
+            --nodes[947][95922879] = { id = 1307, mnID = 2405, type = "Raid", showInZone = true } -- Die Leerenspitze            
+            nodes[947][91332907] = { id = 1308, mnID = 2424, dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", type = "Raid", showInZone = true } -- Marsch auf Quel'Danas
+            --nodes[947][99002561] = { id = 1314, mnID = 2413, type = "Raid", showInZone = true } -- der Traumriss
           end
     
         -- Azeroth Eastern Kingdom Passage
@@ -311,7 +327,9 @@ ns.currentSourceFile = "RetailAzerothNodesLocation.lua"
           if self.db.profile.showAzerothMultiple then
             nodes[947][86434185] = { id = {311, 316 }, mnID = 19, type = "MultipleD", showInZone = true } -- Scarlet Halls, Monastery
             nodes[947][88006838] = { id = {745, 860 }, mnID = 42, type = "MultipleM",showInZone = true } -- Karazhan, Return to Karazhan
-            nodes[947][89225843] = { id = {1197, 239 }, mnID = 15, type = "MultipleD",showInZone = true } --  Legacy of Tyr Dragonflight Dungeon & Vanilla Uldaman
+            nodes[947][89225843] = { id = {1197, 239 }, mnID = 15, type = "MultipleD",showInZone = true } --  Legacy of Tyr Dragonflight Dungeon & Vanilla Uldaman    
+            nodes[947][94692640] = { id = { 1316, 1313, 1307 }, mnID = 2405, TransportName = "(" .. EXPANSION_NAME11 .. ")\n\n", type = "MultipleM", showInZone = true } -- Nexuspunkt Xenas, Arena der Leerennarbe, Die Leerenspitze
+            nodes[947][96842898] = { id = { 1314, 1309 }, mnID = 2413, TransportName = "(" .. EXPANSION_NAME11 .. ")\n\n", type = "MultipleM", showInZone = true } -- Der Traumriss, Das brennende Tal
           end
     
 
@@ -844,7 +862,6 @@ ns.currentSourceFile = "RetailAzerothNodesLocation.lua"
           -- Azeroth Khaz Algar Delves
             if self.db.profile.showAzerothDelves then
               nodes[947][23478352] = { name = DELVES_LABEL .. " " .. L["Entrance"], mnID = 2274, delveIDs = { 2259, 2299, 2348, 2347, 2312, 2310, 2301, 2277, 2251, 2302, 2269, 2249, 2250 }, type = "Delves", showInZone = true } -- Cinderbrew Meadery 
-              nodes[947][93193093] = { name = DELVES_LABEL .. " " .. L["Entrance"], mnID = 2537, delveIDs = { 2502, 2503, 2505, 2535, 2547, 2525, 2506, 2528, 2510 }, type = "Delves", showInZone = true } -- Cinderbrew Meadery 
             end
 
           --Azeroth Khaz ALgar Multiple

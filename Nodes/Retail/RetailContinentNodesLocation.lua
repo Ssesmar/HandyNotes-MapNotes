@@ -225,14 +225,23 @@ ns.currentSourceFile = "RetailContinentNodesLocation.lua"
     
         --Eastern  Kingdom Dungeons
           if self.db.profile.showContinentDungeons then
-            nodes[13][56740242] = { id = 249, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Magisters' Terrace 
-            nodes[13][58572466] = { id = 77, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Zul'Aman 
+            nodes[13][56740242] = { id = 249, type = "Dungeon", dnID = "(" .. EXPANSION_NAME1 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Magisters' Terrace 
+            nodes[13][58572466] = { id = 77, type = "Dungeon", dnID = "(" .. EXPANSION_NAME1 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Zul'Aman 
             nodes[13][31796256] = { id = 65, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Throne of Tides 
             nodes[13][47448471] = { id = 76, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Zul'Gurub 
             nodes[13][40764187] = { id = 64, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Shadowfang Keep 
             nodes[13][50573677] = { id = 246, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Scholomance
             nodes[13][52712836] = { id = 236, lfgid = 40, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Stratholme 
             nodes[13][53135585] = { id = 71, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Grim Batol
+
+            -- Midnight Quel'Thalas
+            nodes[13][58260280] = { id = 1300, type = "Dungeon", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Terrasse der Magisters
+            nodes[13][53132565] = { id = 1299, type = "Dungeon", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Windläuferturm
+            nodes[13][63622304] = { id = 1315, type = "Dungeon", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Maisarakavernen
+            nodes[13][66390419] = { id = 1313, type = "Dungeon", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Arena der Leerennarbe
+            nodes[13][67291205] = { id = 1316, type = "Dungeon", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Nexupunkt Xenas
+            nodes[13][72881155] = { id = 1309, type = "Dungeon", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Das blendende Tal
+            nodes[13][61503275] = { id = 1311, type = "Dungeon", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Nalorakks Bau
           end
 
           -- Eastern Kingdom PetBattleDungeons
@@ -252,10 +261,15 @@ ns.currentSourceFile = "RetailContinentNodesLocation.lua"
     
         --Eastern  Kingdom Raids
           if self.db.profile.showContinentRaids then
-            nodes[13][55160370] = { id = 752, type = "Raid", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Sunwell Plateau 
+            nodes[13][55160370] = { id = 752, type = "Raid", dnID = "(" .. EXPANSION_NAME1 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Sunwell Plateau 
             nodes[13][47536894] = { id = 73, type = "Raid", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Blackwind Descent 
             nodes[13][54905899] = { id = 72, type = "Raid", showOnContinent = true, showInZone = false, showOnMinimap = false } -- The Bastion of Twilight 
             nodes[13][35565150] = { id = 75, type = "Raid", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Baradin Hold
+
+            -- Midnight Quel'Thalas
+            nodes[13][56560795] = { id = 1308, type = "Raid", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Marsch auf Quel'Danas
+            nodes[13][64941164] = { id = 1307, type = "Raid", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Die Leerenspitze
+            nodes[13][74890897] = { id = 1314, type = "Raid", dnID = "(" .. EXPANSION_NAME11 .. ")\n\n", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Der Traumriss
           end
 
 
@@ -353,8 +367,8 @@ ns.currentSourceFile = "RetailContinentNodesLocation.lua"
 
         -- Eastern Kingdom MapNotesIcons
           if self.db.profile.showContinentMapNotes then
-            
-              nodes[13][56471480] = { mnID = 2393, mnID2 = 110, name = "", mnIDText1 = EXPANSION_NAME11, mnIDText2 = EXPANSION_NAME1, type = "MNL", showOnContinent = true, showInZone = false, showOnMinimap = false, TransportName = ns.Silvermoon .. " " .. FACTION_NEUTRAL .. " (" .. EXPANSION_NAME11 .. ")\n\n" .. L["Portals"] .. "\n" ..  " ==> " .. ns.Orgrimmar .. "\n" .. " ==> " .. ns.Harandar .. "\n" .. " ==> " .. ns.VoidTempest .. "\n" .. " ==> " .. ns.Stormwind  .. "\n\n" .. DELVES_LABEL .. "\n ==> " .. ns.TheDarkway .. "\n ==> " .. ns.CollegiateCalamity .. "\n\n\n".. ns.Silvermoon .. " " .. FACTION_HORDE .. " (" .. EXPANSION_NAME1 .. ")\n" .. "\n" .. L["Portals"] .. "\n" ..  " ==> " .. ns.Orgrimmar .. "\n" .. " ==> " .. ns.RuinsofLordaeron .. "\n\n" } -- Portal to Orgrimmar, Ruins of Lordaeron from Silvermoon
+
+            nodes[13][56471480] = { mnID = 2393, mnID2 = 110, name = "", mnIDText1 = EXPANSION_NAME11, mnIDText2 = EXPANSION_NAME1, type = "MNL", showOnContinent = true, showInZone = false, showOnMinimap = false, TransportName = ns.Silvermoon .. " " .. FACTION_NEUTRAL .. " (" .. EXPANSION_NAME11 .. ")\n\n" .. L["Portals"] .. "\n" ..  " ==> " .. ns.Orgrimmar .. "\n" .. " ==> " .. ns.Harandar .. "\n" .. " ==> " .. ns.VoidTempest .. "\n" .. " ==> " .. ns.Stormwind  .. "\n\n" .. DELVES_LABEL .. "\n ==> " .. ns.TheDarkway .. "\n ==> " .. ns.CollegiateCalamity .. "\n\n\n".. ns.Silvermoon .. " " .. FACTION_HORDE .. " (" .. EXPANSION_NAME1 .. ")\n" .. "\n" .. L["Portals"] .. "\n" ..  " ==> " .. ns.Orgrimmar .. "\n" .. " ==> " .. ns.RuinsofLordaeron .. "\n\n" } -- Portal to Orgrimmar, Ruins of Lordaeron from Silvermoon
 
             if self.faction == "Horde" or db.activate.ContinentEnemyFaction then
               nodes[13][43263464] = { mnID = 18, name = "", type = "HIcon", showOnContinent = true, showInZone = false, showOnMinimap = false, TransportName = ns.Undercity .. " - " .. FACTION_HORDE .. "\n" .. "\n" .. L["Portal"] .. "\n" .. " ==> " .. ns.HellfirePeninsula .. "\n" .. "\n" .. ns.RuinsofLordaeron  .. " / " .. ns.TirisfalGlades .. "\n" .. "\n" .. L["Portals"] .. "\n" ..  " ==> " .. ns.Orgrimmar .. "\n" .. " ==> " .. ns.Gromgol .. "\n" .. " ==> " .. ns.HowlingFjord .. "\n" .. " ==> " .. ns.Silvermoon } -- Portal to Orgrimmar, Silvermoon, Howling Fjord and Grom'gol from Tirisfal
@@ -1314,6 +1328,24 @@ ns.currentSourceFile = "RetailContinentNodesLocation.lua"
           -- Quel'Thalas MapNotesIcons
           if self.db.profile.showContinentMapNotes then
             nodes[2537][27433952] = { mnID = 2393, name = "", type = "MNL", showOnContinent = true, showInZone = false, showOnMinimap = false, TransportName = ns.Silvermoon .. " (" .. EXPANSION_NAME11 .. ")\n\n" .. L["Portals"] .. "\n" ..  " ==> " .. ns.Orgrimmar .. "\n" .. " ==> " .. ns.Harandar .. "\n" .. " ==> " .. ns.VoidTempest .. "\n" .. " ==> " .. ns.Stormwind  .. "\n\n" .. DELVES_LABEL .. "\n ==> " .. ns.TheDarkway .. "\n ==> " .. ns.CollegiateCalamity } -- Dornogal
+          end
+
+          -- Quel'Thalas Dungeons
+          if self.db.profile.showContinentDungeons then
+            nodes[2537][29240810] = { id = 1300, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Terrasse der Magisters
+            nodes[2537][17817053] = { id = 1299, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Windläuferturm
+            nodes[2537][46086345] = { id = 1315, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Maisarakavernen
+            nodes[2537][53541263] = { id = 1313, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Arena der Leerennarbe
+            nodes[2537][56112716] = { id = 1316, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Nexupunkt Xenas
+            nodes[2537][77562414] = { id = 1309, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Das blendende Tal
+            nodes[2537][38008953] = { id = 1311, type = "Dungeon", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Nalorakks Bau            
+          end
+
+          -- Quel'Thalas Raids
+          if self.db.profile.showContinentRaids then
+            nodes[2537][27022260] = { id = 1308, type = "Raid", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Marsch auf Quel'Danas
+            nodes[2537][52812948] = { id = 1307, type = "Raid", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Die Leerenspitze
+            nodes[2537][83141931] = { id = 1314, type = "Raid", showOnContinent = true, showInZone = false, showOnMinimap = false } -- Der Traumriss
           end
 
         end

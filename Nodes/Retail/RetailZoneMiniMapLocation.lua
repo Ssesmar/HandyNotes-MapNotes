@@ -926,7 +926,8 @@ ns.currentSourceFile = "RetailZoneMiniMapLocation.lua"
               minimap[2413][54895146] = { mnID = 2576, name = "", TransportName = L["Way to"] .. " " .. L["Portal"] .. "\n   => " .. ns.VoidTempest .. "\n   => " .. ns.SilvermoonMN, type = "Portal", showInZone = false, showOnContinent = false, showOnMinimap = true }
               minimap[2576][64687098] = { mnID = 2393, name = "", type = "Portal", showInZone = false, showOnContinent = false, showOnMinimap = true }
               minimap[2576][61787348] = { mnID = 2405, name = "", type = "Portal", showInZone = false, showOnContinent = false, showOnMinimap = true }
-
+              minimap[2405][51717041] = { mnID = 2413, name = "", type = "PortalS", showInZone = false, showOnContinent = false, showOnMinimap = true }
+              minimap[2405][51527029] = { mnID = 2405, name = "", type = "PortalS", showInZone = false, showOnContinent = false, showOnMinimap = true }
             end
 
           end

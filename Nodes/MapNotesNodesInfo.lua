@@ -857,5 +857,15 @@ nodes[2536] = { } -- Atal'Aman
 nodes[2393] = { } -- Silvermoon
 nodes[2444] = { } -- Schlächteranhöhe
 nodes[2576] = { } -- Rootlands
-
+-- Dungeon map nodes
+nodes[2515] = { } -- Terrasse der Magister
+nodes[2492] = { } -- Windläuferturm
+nodes[2501] = { } -- Maisarakavernen
+nodes[2564] = { } -- Nalorakks Bau
+nodes[2556] = { } -- Nexuspunkt Xenas
+nodes[2574] = { } -- Arena der Leerennarbe
+nodes[2500] = { } -- Das blendende Tal
+nodes[2531] = { } -- Der Traumriss
+nodes[2533] = { } -- Marsch auf Quel'Danas      
+nodes[2529] = { } -- Die Leerenspitze    
 end

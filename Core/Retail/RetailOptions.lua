@@ -4346,8 +4346,8 @@ ns.options = {
                 showZoneQuelThalas = {
                   disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.ZoneMap end,
                   type = "toggle",
-                  name = TextIconKA:GetIconString() .. " " .. ns.QuelThalas,
-                  desc = L["Show all Khaz Algar MapNotes dungeon, raid, portal, zeppelin and ship icons on this map"],
+                  name = TextIconMN:GetIconString() .. " " .. ns.QuelThalas,
+                  desc = L["Show all Quel'Thalas MapNotes dungeon, raid, portal, zeppelin and ship icons on this map"],
                   order = 1.7,
                   width = 1.20,
                   set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
@@ -6356,8 +6356,8 @@ ns.options = {
                 showMiniMapQuelThalas = {
                   disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.MiniMap or ns.Addon.db.profile.activate.SyncZoneAndMinimap end,
                   type = "toggle",
-                  name = TextIconKA:GetIconString() .. " " .. ns.QuelThalas,
-                  desc = L["Show all Khaz Algar MapNotes dungeon, raid, portal, zeppelin and ship icons on this map"],
+                  name = TextIconMN:GetIconString() .. " " .. ns.QuelThalas,
+                  desc = L["Show all Quel'Thalas MapNotes dungeon, raid, portal, zeppelin and ship icons on this map"],
                   order = 1.7,
                   width = 1.20,
                   set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
@@ -8469,7 +8469,7 @@ ns.options = {
           order = 35.3,
           width = 1.20,
           set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
-                if ns.RefreshContinentDelvesPins and WorldMapFrame and WorldMapFrame.GetMapID and WorldMapFrame:IsShown() and WorldMapFrame:GetMapID() == 13 then if ns.Addon.db.profile.showContinentDelves and ns.Addon.db.profile.showContinentEasternKingdom and not ns.Addon.db.profile.activate.HideMapNote then ns.RefreshContinentDelvesPins() else ns.RefreshContinentDelvesPins({ remove = true }) end end
+                if ns.RefreshContinentDelvesPins and WorldMapFrame and WorldMapFrame.GetMapID and WorldMapFrame:IsShown() and WorldMapFrame:GetMapID() == 13 then if ns.Addon.db.profile.showContinentDelves and ns.Addon.db.profile.showContinentQuelThalas and not ns.Addon.db.profile.activate.HideMapNote then ns.RefreshContinentDelvesPins() else ns.RefreshContinentDelvesPins({ remove = true }) end end
                 if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showContinentEasternKingdom then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Continent map"], ns.EasternKingdom, L["icons"], "|cff00ff00" .. L["are shown"]) else 
                 if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showContinentEasternKingdom then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Continent map"], ns.EasternKingdom, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
           },
@@ -8587,11 +8587,11 @@ ns.options = {
         showContinentQuelThalas = {
           disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.Continent end,
           type = "toggle",
-          name = TextIconKA:GetIconString() .. " " .. ns.QuelThalas,
-          desc = L["Show all Khaz Algar MapNotes dungeon, raid, portal, zeppelin and ship icons on this map"],
+          name = TextIconMN:GetIconString() .. " " .. ns.QuelThalas,
+          desc = L["Show all Quel'Thalas MapNotes dungeon, raid, portal, zeppelin and ship icons on this map"],
           order = 36.4,
           width = 1.20,
-          set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
+          set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes")
                 if ns.RefreshContinentDelvesPins and WorldMapFrame and WorldMapFrame.GetMapID and WorldMapFrame:IsShown() and WorldMapFrame:GetMapID() == 2537 then if ns.Addon.db.profile.showContinentDelves and ns.Addon.db.profile.showContinentQuelThalas and not ns.Addon.db.profile.activate.HideMapNote then ns.RefreshContinentDelvesPins() else ns.RefreshContinentDelvesPins({ remove = true }) end end
                 if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showContinentQuelThalas then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Continent map"], ns.QuelThalas, L["icons"], "|cff00ff00" .. L["are shown"]) else 
                 if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showContinentQuelThalas then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. L["Continent map"], ns.QuelThalas, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
@@ -9109,6 +9109,17 @@ ns.options = {
           set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
                 if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showCosmosKhazAlgar then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. WORLDMAP_BUTTON, ns.KhazAlgar, L["icons"], "|cff00ff00" .. L["are shown"]) else 
                 if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showCosmosKhazAlgar then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. WORLDMAP_BUTTON, ns.KhazAlgar, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
+          },
+        showCosmosQuelThalas = {
+          disabled = function() return ns.Addon.db.profile.activate.HideMapNote or not ns.Addon.db.profile.activate.CosmosMap end,
+          type = "toggle",
+          name = TextIconMN:GetIconString() .. " " .. ns.QuelThalas,
+          desc = L["Show all Quel'Thalas MapNotes dungeon, raid, portal, zeppelin and ship icons on this map"],
+          order = 3.4,
+          width = 1.20,
+          set = function(info, v) ns.Addon.db.profile[info[#info]] = v self:FullUpdate() HandyNotes:SendMessage("HandyNotes_NotifyUpdate", "MapNotes") 
+                if ns.Addon.db.profile.ChatMassage and ns.Addon.db.profile.showCosmosKhazAlgar then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. WORLDMAP_BUTTON, ns.QuelThalas, L["icons"], "|cff00ff00" .. L["are shown"]) else 
+                if ns.Addon.db.profile.ChatMassage and not ns.Addon.db.profile.showCosmosKhazAlgar then print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. " " .. "|cffffff00" .. WORLDMAP_BUTTON, ns.QuelThalas, L["icons"], "|cffff0000" .. L["are hidden"])end end end,
           },
         },
       },

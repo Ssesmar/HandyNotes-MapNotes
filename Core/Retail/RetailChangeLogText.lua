@@ -1,9 +1,10 @@
 local ADDON_NAME, ns = ...
 
-ns.CurrentAddonVersion = "3.2.5"
+ns.CurrentAddonVersion = "3.2.6"
 ns.PreviousAddonVersion = "3.2.5" -- Only increase this number if you want to see changelogs and NPC updates after an add-on update. Only important for actual changes to NPCs or major updates
 
 ns.LOCALE_CHANGELOGS = {
+  { version = "3.2.6", table = "partialUpdate" },
   { version = "3.2.5", table = ns.LOCALE_CHANGELOG_3_2_5 },
   { version = "3.2.4", table = "prepatchUpdate" },
   { version = "3.2.3", table = "smallChanges" },
@@ -1873,6 +1874,52 @@ ns.LOCALE_CHANGELOG_3_1_1 = {
   • 각 캐릭터의 원래 블리자드 미니맵 아이콘 설정을 저장하여, 옵션 해제 시 원상복구 가능
 
   • 변경 사항은 즉시 적용되지만, 블리자드 미니맵 하위 메뉴에서는 재시작(/reload) 전까지 잘못 표시될 수 있음
+]],
+}
+
+ns.partialUpdate = {
+  deDE = [[
+• Teilupdate
+]],
+
+  enUS = [[
+• Partial update
+]],
+
+  frFR = [[
+• Mise à jour partielle
+]],
+
+  itIT = [[
+• Aggiornamento parziale
+]],
+
+  esES = [[
+• Actualización parcial
+]],
+
+  esMX = [[
+• Actualización parcial
+]],
+
+  ptBR = [[
+• Atualização parcial
+]],
+
+  ruRU = [[
+• Частичное обновление
+]],
+
+  zhCN = [[
+• 部分更新
+]],
+
+  zhTW = [[
+• 部分更新
+]],
+
+  koKR = [[
+• 부분 업데이트
 ]],
 }
 

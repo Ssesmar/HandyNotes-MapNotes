@@ -935,7 +935,7 @@ do
                       or value.type == "DraneiM" or value.type == "DraneiF" or value.type == "N11M" or value.type == "N11F" or value.type == "TrollM" or value.type == "TrollF" or value.type == "TaureM" or value.type == "TaureF" or value.type == "PandaM" 
                       or value.type == "PandaF" or value.type == "HMTaurenM" or value.type == "HMTaurenF" or value.type == "LFDraeneiM" or value.type == "LFDraeneiF" or value.type == "LN11BorneM" or value.type == "LN11BorneF" or value.type == "Void11M" 
                       or value.type == "Void11F" or value.type == "DarkDwarfM" or value.type == "DarkDwarfF" or value.type == "DracthyrM" or value.type == "DracthyrF" or value.type == "VulperaM" or value.type == "VulperaF" or value.type == "MechaGnomeM" 
-                      or value.type == "MechaGnomeM" or value.type == "ZandalariTrollM" or value.type == "ZandalariTrollF"
+                      or value.type == "MechaGnomeM" or value.type == "ZandalariTrollM" or value.type == "ZandalariTrollF" or value.type == "HaranirM" or value.type == "HaranirW"
 
       ns.MapType0 = mapInfo.mapType == 0 -- Cosmic map
       ns.MapType1 = mapInfo.mapType == 1 -- World map

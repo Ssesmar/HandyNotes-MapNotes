@@ -438,6 +438,7 @@ ns.defaults = {
       showCosmosShadowlands = true,
       showCosmosDragonIsles = true,
       showCosmosKhazAlgar = true,
+      showCosmosQuelThalas = true,
 
     --6 Inside Dungeon Map tab
       showDungeonExit = true,

@@ -16,9 +16,10 @@ OnTooltipShow = function(tooltip)
     end
     return
   end
-  local mapID = (WorldMapFrame and WorldMapFrame.GetMapID and WorldMapFrame:GetMapID()) or C_Map.GetBestMapForUnit("player")
-  local info = mapID and C_Map.GetMapInfo(mapID) or {}
+
   local PlayerMapID = C_Map.GetBestMapForUnit("player")
+  local mapID = PlayerMapID
+  local info = mapID and C_Map.GetMapInfo(mapID) or {}
 
   if not tooltip or not tooltip.AddLine then return end
     tooltip:AddLine(ns.COLORED_ADDON_NAME)
@@ -295,9 +296,10 @@ end,
 
 OnClick = function(self, button)
   if not (ns.Addon and ns.Addon.db and ns.Addon.db.profile) then return end
-  local mapID = (WorldMapFrame and WorldMapFrame.GetMapID and WorldMapFrame:GetMapID()) or C_Map.GetBestMapForUnit("player")
-  local info = mapID and C_Map.GetMapInfo(mapID) or {}
+  
   local PlayerMapID = C_Map.GetBestMapForUnit("player")
+  local mapID = PlayerMapID
+  local info = mapID and C_Map.GetMapInfo(mapID) or {}
 
   if button == "RightButton" and not IsShiftKeyDown() then
 

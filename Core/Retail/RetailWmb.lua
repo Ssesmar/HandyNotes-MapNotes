@@ -239,14 +239,14 @@ local CurrentMapID = WorldMapFrame:GetMapID()
                     if ns.Addon.db.profile.showContinentDelves then ns.RefreshContinentDelvesPins() end
                     if not ns.Addon.db.profile.showContinentDelves then ns.RefreshContinentDelvesPins({ remove = true }) end
                     if ns.Addon.db.profile.MmbWmbChatMessage then
-                        print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. "|cffffff00 ".. L["Continent map"], ns.QuelThalas, L["icons"], "|cffff0000" .. L["are hidden"])
+                        print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. "|cffffff00 ".. L["Continent map"], L["Quel'Thalas"], L["icons"], "|cffff0000" .. L["are hidden"])
                     end
                 else
                     ns.Addon.db.profile.showContinentQuelThalas = true
                     if ns.Addon.db.profile.showContinentDelves then ns.RefreshContinentDelvesPins() end
                     if not ns.Addon.db.profile.showContinentDelves then ns.RefreshContinentDelvesPins({ remove = true }) end
                     if ns.Addon.db.profile.MmbWmbChatMessage then
-                        print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. "|cffffff00 ".. L["Continent map"], ns.QuelThalas, L["icons"], "|cff00ff00" .. L["are shown"])
+                        print(TextIconMNL4:GetIconString() .. " " .. ns.COLORED_ADDON_NAME .. " " .. TextIconMNL4:GetIconString() .. "|cffffff00 ".. L["Continent map"], L["Quel'Thalas"], L["icons"], "|cff00ff00" .. L["are shown"])
                     end
                 end
             end

@@ -124,6 +124,8 @@ ns.defaults = {
       ZoneAlphaTransmogger = 1,
       ZoneScaleItemUpgrade = 1.5,
       ZoneAlphaItemUpgrade = 1,
+      ZoneScaleDecorExpert = 1.5,
+      ZoneAlphaDecorExpert = 1,
       ZoneScalePaths = 1.5,
       ZoneAlphaPaths = 1,
 
@@ -158,6 +160,8 @@ ns.defaults = {
       MiniMapAlphaTransmogger = 1,
       MiniMapScaleItemUpgrade = 1.5,
       MiniMapAlphaItemUpgrade = 1,
+      MiniMapScaleDecorExpert = 1.5,
+      MiniMapAlphaDecorExpert = 1,
       MiniMapScalePaths = 1.5,
       MiniMapAlphaPaths = 1,
 
@@ -278,6 +282,7 @@ ns.defaults = {
       showMiniMapTransmogger = true,
       showMiniMapStablemaster = true,
       showMiniMapItemUpgrade = true,
+      showMiniMapDecorExpert = true,
       showMiniMapCatalyst = true,
       showMiniMapZidormi = true,
     -- MiniMap Paths
@@ -355,6 +360,7 @@ ns.defaults = {
       showZoneTransmogger = true,
       showZoneStablemaster = true,
       showZoneItemUpgrade = true,
+      showZoneDecorExpert = true,
       showZoneCatalyst = true,
       showZoneZidormi = true,
       showZonePaths = true,
@@ -536,6 +542,7 @@ ns.defaults = {
       showCapitalsStablemaster = true,
       showCapitalsTradingPost = true,
       showCapitalsMountMerchent = true,
+      showCapitalsDecorExpert = true,
 
     -- Capital Class Hall
       CapitalsClassHallScale = 1.5,
@@ -643,6 +650,7 @@ ns.defaults = {
       showMinimapCapitalsStablemaster = true,
       showMinimapCapitalsTradingPost = true,
       showMinimapCapitalsMountMerchent = true,
+      showMinimapCapitalsDecorExpert = true,
 
     -- Capital Class Hall
       MinimapCapitalsClassHallScale = 1.5,
@@ -759,30 +767,15 @@ ns.defaults = {
         MinimapCapitalsClassHall = true,
       },
 
-    --11 deleted icons function
+    -- 11 DeleteIcons
       deletedIcons = {
-
-        AzerothDeletedIcons = {
-          ['*'] = {},
-        },
-        ContinentDeletedIcons = {
-          ['*'] = {},
-        },
-        ZoneDeletedIcons = {
-          ['*'] = {},
-        },
-        MinimapZoneDeletedIcons = {
-          ['*'] = {},
-        },
-        DungeonDeletedIcons = {
-          ['*'] = {},
-        },
-        CapitalsDeletedIcons = {
-          ['*'] = {},
-        },
-        MinimapCapitalsDeletedIcons = {
-          ['*'] = {},
-        },
+        AzerothDeletedIcons = { ['*'] = {} },
+        ContinentDeletedIcons = { ['*'] = {} },
+        ZoneDeletedIcons = { ['*'] = {} },
+        MinimapZoneDeletedIcons = { ['*'] = {} },
+        DungeonDeletedIcons = { ['*'] = {} },
+        CapitalsDeletedIcons = { ['*'] = {} },
+        MinimapCapitalsDeletedIcons = { ['*'] = {} },
       },
 
     --12 FogOfWarColor
@@ -825,6 +818,10 @@ ns.defaults = {
         areaMapFogOfWarColorB = 0,
         areaMapFogOfWarColorA = 1,
       },
+  },
 
+  global = {
+    useSharedProfile = false,
+    sharedProfileName = "MapNotes",
   },
 }

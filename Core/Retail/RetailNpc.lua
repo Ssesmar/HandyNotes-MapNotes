@@ -441,9 +441,15 @@ function ns.NpcTooltips(tooltip, nodeData )
         end
       end
 
+      local npcInfo = nodeData["npcIDs" .. i .. "Info"]
+      if npcInfo and npcInfo ~= "" then
+        tooltip:AddLine("|cffffffff" .. npcInfo .. "|r", 1, 1, 1, true)
+      end
+
       if i < 10 and (nodeData["npcIDs"..(i+1)] or nodeData.dnID) then
         tooltip:AddLine(" ")
       end
+
     end
   end
 
@@ -563,7 +569,8 @@ function ns.CreateTargetButton(npcName, title)
       local npcName = self.npcName
       if not npcName or npcName == "" then return end
 
-      local macro = string.format("/target %s\n/run if UnitExists('target') and (GetRaidTargetIndex('target') or 0) ~= 7 then SetRaidTarget('target', 7) end", npcName)
+      --local macro = string.format("/target %s",npcName)
+      local macro = string.format("/targetexact %s\n/tm 7",npcName)
       self:SetAttribute("type", "macro")
       self:SetAttribute("type1", "macro")
       self:SetAttribute("macrotext", macro)
@@ -658,6 +665,8 @@ function ns.TryCreateTarget(uiMapId, coord, button)
       else
         if ns.Addon.db.profile.NpcNameTargetingChatText then
           print( ("%s %s (%s)"):format(ns.COLORED_ADDON_NAME, SPELL_FAILED_CUSTOM_ERROR_216, colored))
+        --else
+        --  RaidNotice_AddMessage(RaidWarningFrame,string.format(ns.COLORED_ADDON_NAME .. "\n%s\n %s", SPELL_FAILED_CUSTOM_ERROR_216, colored), ChatTypeInfo["RAID_WARNING"])
         end
       end
     end

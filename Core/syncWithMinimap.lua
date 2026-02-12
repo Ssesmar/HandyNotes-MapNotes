@@ -140,6 +140,7 @@ local db = ns.Addon.db.profile
         self.db.profile.showMinimapCapitalsStablemaster = self.db.profile.showCapitalsStablemaster
         self.db.profile.showMinimapCapitalsTradingPost = self.db.profile.showCapitalsTradingPost
         self.db.profile.showMinimapCapitalsMountMerchent = self.db.profile.showCapitalsMountMerchent
+        self.db.profile.showMinimapCapitalsDecorExpert = self.db.profile.showCapitalsDecorExpert
         self.db.profile.showMinimapCapitalsWeaponMasters = self.db.profile.showCapitalsWeaponMasters
         -- Capital Classes
         self.db.profile.showMinimapCapitalsClassAutomatically = self.db.profile.showCapitalsClassAutomatically
@@ -213,6 +214,7 @@ local db = ns.Addon.db.profile
         self.db.profile.showMiniMapRenownQuartermaster = self.db.profile.showZoneRenownQuartermaster
         self.db.profile.showMiniMapTransmogger = self.db.profile.ZoneAlphaRenownQuartermaster
         self.db.profile.showMiniMapItemUpgrade = self.db.profile.showZoneItemUpgrade
+        self.db.profile.showMiniMapDecorExpert = self.db.profile.showZoneDecorExpert
         self.db.profile.showMiniMapCatalyst = self.db.profile.showZoneCatalyst
         self.db.profile.showMiniMapZidormi = self.db.profile.showZoneZidormi
         -- Zone Professions    

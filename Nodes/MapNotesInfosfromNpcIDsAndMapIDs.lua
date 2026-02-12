@@ -88,8 +88,10 @@ ns.Frostwall = mapName(590)
 ns.Stormshield = mapName(622)
 ns.Warspear = mapName(624)
 ------------------------------------ Broken Isles Zones
+ns.Suramar = mapName(680)
 ns.Azsuna = mapName(630)
 ns.TelogrusRift = mapName(971)
+ns.Eredath = mapName(882)
 ------------------------------------ Kul Tiras Zones
 ns.TiragardeSound = mapName(895)
 ns.Drustvar = mapName(896)
@@ -119,6 +121,7 @@ ns.EmeraldDream = mapName(2200)
 ns.Amirdrassil = mapName(2239)
 ------------------------------------ Khaz Algar Zones
 ns.CityOfThreads = mapName(2213)
+ns.TheRingingDeeps = mapName(2214)
 ns.HallofAwakening = mapName(2322)
 ns.Dornogal = mapName(2339)
 ns.SirenIsle = mapName(2369)
@@ -169,6 +172,8 @@ ns.Ratchet = areaName(392)
 ns.TheramoreIsle = areaName(15)
 ns.DarkPortal = areaName(72)
 ns.ShadoPanGarison = areaName(6197)
+ns.Amanizar = areaName(16183)
+ns.Arati = areaName(16183)
 ------------------------------------ Sub Zones Horde
 ns.Gromgol = areaName(117)
 ns.RuinsofLordaeron = areaName(153)
@@ -197,6 +202,8 @@ ns.Scholomance = instanceName(246)
 ns.ScarletMonastery = instanceName(316)
 ns.Naxxramas = instanceName(754)
 ns.Rookery = instanceName(1268)
+------------------------------------ Midnight
+ns.MurderRow = instanceName(1304)
 
 
 ------------------------------------ npcNameID Names
@@ -296,7 +303,8 @@ ns.CookingF = npcTitleLine1(46709) -- Arugi
 ns.TailoringM = npcTitleLine1(3363) -- Magar
 ns.FishingM = npcTitleLine1(70398) -- Ben mit der dröhnenden Stimme
 ns.ArchaeologyM = npcTitleLine1(47571) -- Bellok Leuchtklinge
-
+ns.DecorExpertW = npcTitleLine1(256828) -- Dennia Silberzunge
+ns.DecorExpertM = npcTitleLine1(108017) -- Torv Dubstampf
 
 ------------------------------------ TaxiIDs Text for Retail only
 local function TaxiID(id)
@@ -335,3 +343,32 @@ function ns.GetCurrencyName(currencyID)
 end
 
 ns.WakeningEssence = ns.GetCurrencyName(1533) -- Dalaran Vendor Arkonomant Vridiel
+
+
+------------------------------------ factionID Text
+function ns.FactionName(factionID)
+    local name
+
+    if C_MajorFactions and C_MajorFactions.GetMajorFactionData then
+        local mf = C_MajorFactions.GetMajorFactionData(factionID)
+        name = mf and mf.name
+        if name and name ~= "" then
+            return name
+        end
+    end
+
+    if C_ReputationManager and C_ReputationManager.GetFactionDataByID then
+        local data = C_ReputationManager.GetFactionDataByID(factionID)
+        name = data and data.name
+        if name and name ~= "" then
+            return name
+        end
+    end
+
+    return ""
+end
+
+ns.Amanistamm = ns.FactionName(2696)
+ns.TheSingularity = ns.FactionName(2699)
+ns.Harati = ns.FactionName(2704)
+ns.SilvermoonCourt = ns.FactionName(2710)
